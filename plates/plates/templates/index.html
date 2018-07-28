@@ -89,9 +89,7 @@
               </div>
               </td>
               <td>
-                {% for number_plate in owner.number_plate.all %}
-                  {{ number_plate }}{% if not forloop.last %},{% endif %}
-                {% endfor %}
+                  {{ owner.number_plate.all|join:", "|truncatechars:28 }}
               </td>
               <td>
                   <!-- <button class="btn btn&#45;outline&#45;primary" type="button" id="button&#45;addon3"> -->
