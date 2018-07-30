@@ -63,12 +63,11 @@
             this.setState({owner_id: event.target.value});
             this.setState({owner: get_owner(event.target.value)});
         };
-        handleToggleEdit(event) { this.setState({editable: !this.state.editable }) };
 
         toggleEditable(event) {
             if (this.state['editable'] === true) {
               fetch('/api/numberplates/'+ this.state.number_plate_id + '/' , {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
@@ -270,8 +269,30 @@
             this.handleDelete = this.handleDelete.bind(this);
         };
 
-        handleFirstNameChange(event) {};
-        handleLastNameChange(event) {};
+        handleFirstNameChange(event) {this.setState({first_name: event.target.value});};
+        handleLastNameChange(event) {this.setState({last_name: event.target.value});};
+        toggleEditable(event) {
+            if (this.state['editable'] === true) {
+              fetch('/api/owners/'+ this.state.owner_id + '/' , {
+                method: 'PATCH',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  'first_name': this.state.first_name,
+                  'last_name': this.state.last_name,
+                  'id': this.state.owner_id})
+              }).then(function (resp) {
+                resp.json().then(json => {
+                    console.log(json);
+                });
+              }).catch(function (err) {
+              });
+            };
+            this.setState({editable: !this.state['editable']});
+        };
+
         handleDelete(event) {
           function handleDELETEResponse(resp) {
             this.setState({deleted: true});
@@ -293,13 +314,13 @@
             return (
             <tr>
               <td>
-                <input class="form-control" size="6" name="number_plate" onChange='' value=''/>
+                <div class="input-group">
+                  <input class="form-control" placeholder="First name" name="number_plate" onChange={ this.handleFirstNameChange } value={ this.state.first_name }/>
+                  <input class="form-control" placeholder="Last name" name="number_plate_id" onChange={ this.handleLastNameChange } value={ this.state.last_name }/>
+                </div>
               </td>
               <td>
-                <input class="form-control" type="hidden" size="6" name="number_plate_id" value=''/>
-              </td>
-              <td>
-                  <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick=''>
+                  <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, this.state.owner_id) }>
                     <i class="fas fa-save"></i>
                   </button>&nbsp;
                   <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
@@ -318,7 +339,7 @@
               </div>
               </td>
               <td>
-                  <button class="btn btn-outline-primary" type="button" id="button-addon3">
+                  <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, this.state.number_plate_id) }>
                     <i class="fas fa-edit"></i>
                   </button>&nbsp;
                   <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
