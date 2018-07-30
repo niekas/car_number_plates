@@ -15,12 +15,34 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.min.js"></script>
     <style>
      form {
-         display: inline;
+       display: inline;
+     }
+     #owner-edit {
+       max-width: 100%;
+     }
+     table {
+        width: 500px;
+        table-layout: fixed;
      }
     </style>
 
 
     <script type="text/babel">
+    var owner_options = [
+      ["-1", "------------"],
+      {% for owner in owners %}
+        [{{ owner.pk }}, "{{ owner }}"],
+      {% endfor %}
+    ];
+
+    function get_owner(key) {
+      for (var i=0; i < owner_options.length; i++) {
+        if (owner_options[i][0] == key) {
+            return owner_options[i][1];
+        };
+      };
+    };
+
      class NumberPlate extends React.Component {
         constructor(props) {
           super(props);
@@ -28,32 +50,111 @@
               owner: props.owner,
               owner_id: props.owner_id,
               number_plate: props.number_plate,
-              number_plate_id: props.numer_plate_id,
-              deleted: false,
+              number_plate_id: props.number_plate_id,
+              deleted: props.deleted,
+              editable: props.editable
             };
             this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
             this.handleOwnerChange = this.handleOwnerChange.bind(this);
-            this.handleOwnerIDChange = this.handleOwnerIDChange.bind(this);
-            this.handleNumberPlateIDChange = this.handleNumberPlateIDChange.bind(this);
+            // this.handleOwnerIDChange = this.handleOwnerIDChange.bind(this);
+            // this.handleNumberPlateIDChange = this.handleNumberPlateIDChange.bind(this);
+            this.handleDelete = this.handleDelete.bind(this);
         };
-        handleNumberPlateChange(event) { this.setState({number_plate: event.target.value}); };
-        handleOwnerChange(event) { this.setState({owner: event.target.value}); };
-        handleOwnerIDChange(event) { this.setState({owner_id: event.target.value})};
-        handleNumberPlateIDChange(event) { this.setState({number_plate_id: event.target.value})};
+        handleNumberPlateChange(event) {this.setState({number_plate: event.target.value});};
+        handleOwnerChange(event) {
+            this.setState({owner_id: event.target.value});
+            this.setState({owner: get_owner(event.target.value)});
+        };
+        // handleOwnerIDChange(event) { this.setState({owner_id: event.target.value})};
+        // handleNumberPlateIDChange(event) { this.setState({number_plate_id: event.target.value})};
+        handleToggleEdit(event) { this.setState({editable: !this.state.editable }) };
+
+        toggleEditable(event) {
+            if (this.state['editable'] === true) {
+              fetch('/api/numberplates/'+ this.state.number_plate_id + '/' , {
+                method: 'PUT',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  'owner': '/api/owners/' + this.state.owner_id + '/',
+                  'number': this.state.number_plate,
+                  'id': this.state.number_plate_id})
+              }).then(function (resp) {
+              }).catch(function (err) {
+              });
+            };
+            this.setState({editable: !this.state['editable']});
+        };
+
+        handleDelete(event) {
+          function handleDELETEResponse(resp) {
+            this.setState({deleted: true});
+          };
+          handleDELETEResponse = handleDELETEResponse.bind(this);
+
+          fetch('/api/numberplates/' + this.state.number_plate_id + '/', {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          }).then(handleDELETEResponse);
+        };
 
         render() {
-          return ([
+          if (this.state.deleted === true) return null;
+
+          if (this.state.editable === true) {
+            const owner_select = owner_options.map(function(owner) {
+              if (owner[0] !== '-1')
+                return <option value={ owner[0] }>{ owner[1] }</option>
+            });
+            return (
+            <tr>
+              <td>
+                <input class="form-control" size="6" name="number_plate"  onChange={ this.handleNumberPlateChange } value={ this.state.number_plate }/>
+                <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.state.number_plate_id }/>
+              </td>
+              <td>
+                <select id='owner-edit' ref='owner' name='owner' class="custom-select" value={this.state.owner_id} onChange={this.handleOwnerChange}>
+                  { owner_select }
+                </select>
+              </td>
+              <td>
+                  <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, this.state.number_plate_id) }>
+                    <i class="fas fa-save"></i>
+                  </button>&nbsp;
+                  <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                    <i class="fas fa-trash"></i>
+                  </button>
+              </td>
+            </tr>
+            );
+          };
+          return (
+          <tr>
             <td>
               { this.state.number_plate }
               <input class="form-control" type="hidden" size="6" name="number_plate" value={ this.state.number_plate }/>
               <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.state.number_plate_id }/>
-            </td>,
+            </td>
             <td>
               { this.state.owner }
               <input class="form-control" type="hidden" size="6" name="owner" value={ this.state.owner }/>
               <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.state.owner_id }/>
             </td>
-          ]);
+            <td>
+                <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, this.state.number_plate_id) }>
+                  <i class="fas fa-edit"></i>
+                </button>&nbsp;
+                <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                  <i class="fas fa-trash"></i>
+                </button>
+            </td>
+          </tr>
+          );
         }
      };
 
@@ -71,15 +172,11 @@
                   'number_plate': '{{ number_plate }}',
                   'owner': '{{ number_plate.owner }}',
                   'owner_id': '{{ number_plate.owner.pk }}',
-                  'deleted': false
+                  'deleted': false,
+                  'editable': false
                 },
               {% endfor %}
-              ],
-            owner_options: {
-              {% for owner in owners %}
-                {{ owner.pk }}: "{{ owner }}",
-              {% endfor %}
-            }
+              ]
           };
 
           this.resetNewNumberPlateState = this.resetNewNumberPlateState.bind(this);
@@ -100,40 +197,15 @@
           this.setState({new_number_plate: event.target.value});
         };
 
-        toggleEditable(event) {
-            console.log(event);
-            // Update state
-        };
-
-        handleDelete(event) {
-          function handleDELETEResponse(resp) {
-              var number_plates = [];
-              for (var i=0; i < this.state.number_plates.length; i++) {
-                if (this.state.number_plates[i].number_plate_id === event) {
-                    this.state.number_plates[i].deleted = true;
-                };
-                number_plates.push(this.state.number_plates[i]);
-              };
-              this.setState({number_plates: number_plates});
-          };
-          handleDELETEResponse = handleDELETEResponse.bind(this);
-
-          fetch('/api/numberplates/' + event + '/', {
-            method: 'DELETE',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-          }).then(handleDELETEResponse);
-
-        };
-
         handleCreate(event) {
           event.preventDefault();
           function handlePOSTResponse(resp) {
-            var new_element = {owner_id: this.state.new_owner_id, number_plate:
-            this.state.new_number_plate, number_plate_id: '-1', owner:
-            this.state.owner_options[this.state.new_owner_id]};
+            var new_element = {
+              owner_id: this.state.new_owner_id,
+              number_plate: this.state.new_number_plate,
+              number_plate_id: '-1',
+              owner: get_owner(this.state.new_owner_id)
+            };
             this.setState({number_plates: [...this.state.number_plates, new_element]});
 
             this.resetNewNumberPlateState();
@@ -179,19 +251,8 @@
                 </td>
               </tr>,
                 this.state.number_plates.map(data => {
-                  if (data.deleted === true) return null;
-                  return <tr>
-                    <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id}
-                                 owner={data.owner} owner_id={data.owner_id} />
-                    <td>
-                        <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, data.number_plate_id) }>
-                          <i class="fas fa-edit"></i>
-                        </button>&nbsp;
-                        <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete.bind(this, data.number_plate_id) }>
-                          <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                  </tr>
+                  return <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id}
+                                 owner={data.owner} owner_id={data.owner_id} deleted={data.deleted} editable={ data.editable } />
                 })]
             );
         }
