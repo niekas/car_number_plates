@@ -200,15 +200,16 @@
         handleCreate(event) {
           event.preventDefault();
           function handlePOSTResponse(resp) {
-            var new_element = {
-              owner_id: this.state.new_owner_id,
-              number_plate: this.state.new_number_plate,
-              number_plate_id: '-1',
-              owner: get_owner(this.state.new_owner_id)
-            };
-            this.setState({number_plates: [...this.state.number_plates, new_element]});
-
-            this.resetNewNumberPlateState();
+            resp.json().then(json => {
+              var new_element = {
+                owner_id: this.state.new_owner_id,
+                number_plate: this.state.new_number_plate,
+                number_plate_id: json['id'],
+                owner: get_owner(this.state.new_owner_id)
+              };
+              this.setState({number_plates: [...this.state.number_plates, new_element]});
+              this.resetNewNumberPlateState();
+            });
           };
           handlePOSTResponse = handlePOSTResponse.bind(this);
 
