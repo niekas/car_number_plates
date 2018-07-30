@@ -85,7 +85,7 @@
           this.resetNewNumberPlateState = this.resetNewNumberPlateState.bind(this);
           this.handleOwnerChange = this.handleOwnerChange.bind(this);
           this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
-          this.handleNew = this.handleNew.bind(this);
+          this.handleCreate = this.handleCreate.bind(this);
         };
 
         resetNewNumberPlateState() {
@@ -101,6 +101,8 @@
         };
 
         toggleEditable(event) {
+            console.log(event);
+            // Update state
         };
 
         handleDelete(event) {
@@ -126,7 +128,7 @@
 
         };
 
-        handleNew(event) {
+        handleCreate(event) {
           event.preventDefault();
           function handlePOSTResponse(resp) {
             var new_element = {owner_id: this.state.new_owner_id, number_plate:
@@ -156,7 +158,7 @@
             return ([
               <tr>
                 <td colspan="3">
-                  <form onSubmit={ this.handleNew }>
+                  <form onSubmit={ this.handleCreate }>
                     {% csrf_token %}
                     <div class="input-group">
                       <input id='number_plate' class="form-control" type="text" name="number_plate" placeholder="Car plate"
@@ -182,7 +184,7 @@
                     <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id}
                                  owner={data.owner} owner_id={data.owner_id} />
                     <td>
-                        <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                        <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, data.number_plate_id) }>
                           <i class="fas fa-edit"></i>
                         </button>&nbsp;
                         <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete.bind(this, data.number_plate_id) }>
