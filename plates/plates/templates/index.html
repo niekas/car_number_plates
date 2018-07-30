@@ -56,8 +56,6 @@
             };
             this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
             this.handleOwnerChange = this.handleOwnerChange.bind(this);
-            // this.handleOwnerIDChange = this.handleOwnerIDChange.bind(this);
-            // this.handleNumberPlateIDChange = this.handleNumberPlateIDChange.bind(this);
             this.handleDelete = this.handleDelete.bind(this);
         };
         handleNumberPlateChange(event) {this.setState({number_plate: event.target.value});};
@@ -65,8 +63,6 @@
             this.setState({owner_id: event.target.value});
             this.setState({owner: get_owner(event.target.value)});
         };
-        // handleOwnerIDChange(event) { this.setState({owner_id: event.target.value})};
-        // handleNumberPlateIDChange(event) { this.setState({number_plate_id: event.target.value})};
         handleToggleEdit(event) { this.setState({editable: !this.state.editable }) };
 
         toggleEditable(event) {
@@ -259,9 +255,182 @@
         }
      };
 
+     class Owner extends React.Component {
+        constructor(props) {
+          super(props);
+            this.state = {
+              owner_id: props.owner_id,
+              first_name: props.first_name,
+              last_name: props.last_name,
+              deleted: props.deleted,
+              editable: props.editable
+            };
+            this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+            this.handleLastNameChange = this.handleLastNameChange.bind(this);
+            this.handleDelete = this.handleDelete.bind(this);
+        };
+
+        handleFirstNameChange(event) {};
+        handleLastNameChange(event) {};
+        handleDelete(event) {
+          function handleDELETEResponse(resp) {
+            this.setState({deleted: true});
+          };
+          handleDELETEResponse = handleDELETEResponse.bind(this);
+
+          fetch('/api/owners/' + this.state.owner_id + '/', {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          }).then(handleDELETEResponse);
+        };
+
+        render() {
+          if (this.state.deleted === true) return null;
+          if (this.state.editable === true) {
+            return (
+            <tr>
+              <td>
+                <input class="form-control" size="6" name="number_plate" onChange='' value=''/>
+              </td>
+              <td>
+                <input class="form-control" type="hidden" size="6" name="number_plate_id" value=''/>
+              </td>
+              <td>
+                  <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick=''>
+                    <i class="fas fa-save"></i>
+                  </button>&nbsp;
+                  <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                    <i class="fas fa-trash"></i>
+                  </button>
+              </td>
+            </tr>
+            );
+          };
+          return (
+            <tr>
+              <td>
+              <div class="input-group">
+                <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.state.owner_id }/>
+                { this.state.first_name } { this.state.last_name }
+              </div>
+              </td>
+              <td>
+                  <button class="btn btn-outline-primary" type="button" id="button-addon3">
+                    <i class="fas fa-edit"></i>
+                  </button>&nbsp;
+                  <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                    <i class="fas fa-trash"></i>
+                  </button>
+              </td>
+            </tr>
+          );
+        };
+      };
+
+
+
+
+
+     class OwnerTable extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            new_first_name: '',
+            new_last_name: '',
+            error_message: '',
+            owners: [
+              {% for owner in owners %}
+                {
+                  'owner_id': '{{ owner.pk }}',
+                  'first_name': '{{ owner.first_name }}',
+                  'last_name': '{{ owner.last_name }}',
+                  'deleted': false,
+                  'editable': false
+                },
+              {% endfor %}
+              ]
+          };
+
+          this.resetNewOwnerState = this.resetNewOwnerState.bind(this);
+          this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+          this.handleLastNameChange = this.handleLastNameChange.bind(this);
+          this.handleCreate = this.handleCreate.bind(this);
+        };
+
+        resetNewOwnerState(event) {
+            this.setState({new_first_name: '', new_last_name: ''});
+        };
+        handleFirstNameChange(event) { this.setState({new_first_name: event.target.value}); };
+        handleLastNameChange(event) { this.setState({new_last_name: event.target.value}); };
+        handleCreate(event) {
+          event.preventDefault();
+
+          function handlePOSTResponse(resp) {
+            resp.json().then(json => {
+              var new_element = {
+                owner_id: json['id'],
+                first_name: this.state.new_first_name,
+                last_name: this.state.new_last_name,
+              };
+              this.setState({owners: [...this.state.owners, new_element]});
+              owner_options.push([json['id'], this.state.new_first_name + ' ' + this.state.new_last_name]);
+              this.resetNewOwnerState();
+            });
+          };
+          handlePOSTResponse = handlePOSTResponse.bind(this);
+
+          fetch('/api/owners/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              first_name: this.state.new_first_name,
+              last_name: this.state.new_last_name,
+              'number_plate': []})
+            }).then(handlePOSTResponse).catch(function (err) {
+                this.setState({error_message: err});
+            });
+        };
+
+        render() {
+            return ([
+            <tr>
+              <td colspan="2">
+                <form onSubmit={ this.handleCreate }>
+                  <div class="input-group">
+                    <input id='first_name' class="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2" value={this.state.new_first_name} onChange={this.handleFirstNameChange} />
+                    <input id='last_name' class="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2" value={this.state.new_last_name} onChange={this.handleLastNameChange} />
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-primary" type="submit" id="button-addon2">
+                        <i class="fas fa-plus-square"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </td>
+            </tr>,
+                this.state.owners.map(data => {
+                  return <Owner first_name={data.first_name} last_name={data.last_name} owner_id={data.owner_id}
+                                 deleted={data.deleted} editable={ data.editable } />
+                })]
+            );
+        }
+    };
+
+
       ReactDOM.render(
         <NumberPlateTable />,
         document.getElementById('number-plate-table')
+      );
+
+      ReactDOM.render(
+        <OwnerTable />,
+        document.getElementById('owner-table')
       );
 
 
@@ -290,44 +459,11 @@
         <thead>
           <tr>
             <th>Owner</th>
-            <th>Car number plates owned</th>
             <th>Action</th>
           </tr>
         </thead>
+        <tbody id="owner-table"/>
         <tbody>
-          <tr>
-            <td colspan="3">
-              <div class="input-group">
-                <input id='first_name' class="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2">
-                <input id='last_name' class="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                  <button class="btn btn-outline-primary" type="button" id="button-addon2">
-                    <i class="fas fa-plus-square"></i>
-                  </button>
-                </div>
-              </div>
-            </td>
-          </tr>
-          {% for owner in owners %}
-            <tr >
-              <td>
-              <div class="input-group">
-                {{ owner }}
-              </div>
-              </td>
-              <td>
-                  {{ owner.number_plate.all|join:", "|truncatechars:28 }}
-              </td>
-              <td>
-                  <button class="btn btn-outline-primary" type="button" id="button-addon3">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="btn btn-outline-danger" type="button" id="button-addon3">
-                    <i class="fas fa-trash"></i>
-                  </button>
-              </td>
-            </tr>
-          {% endfor %}
         </tbody>
       </table>
     </div>
