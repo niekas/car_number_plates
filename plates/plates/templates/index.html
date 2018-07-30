@@ -1,16 +1,215 @@
 <html>
 <head>
+    <title>Car Number Plates</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://fb.me/react-15.0.0.js"></script>
+    <script type="text/javascript" src="https://fb.me/react-dom-15.0.0.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.1/prop-types.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/16.3.2/umd/react.production.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react-dom/16.3.2/umd/react-dom.production.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.min.js"></script>
+    <style>
+     form {
+         display: inline;
+     }
+    </style>
+
+
+    <script type="text/babel">
+     class NumberPlate extends React.Component {
+        constructor(props) {
+          super(props);
+            this.state = {
+              owner: props.owner,
+              owner_id: props.owner_id,
+              number_plate: props.number_plate,
+              number_plate_id: props.numer_plate_id,
+              deleted: false,
+            };
+            this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
+            this.handleOwnerChange = this.handleOwnerChange.bind(this);
+            this.handleOwnerIDChange = this.handleOwnerIDChange.bind(this);
+            this.handleNumberPlateIDChange = this.handleNumberPlateIDChange.bind(this);
+        };
+        handleNumberPlateChange(event) { this.setState({number_plate: event.target.value}); };
+        handleOwnerChange(event) { this.setState({owner: event.target.value}); };
+        handleOwnerIDChange(event) { this.setState({owner_id: event.target.value})};
+        handleNumberPlateIDChange(event) { this.setState({number_plate_id: event.target.value})};
+
+        render() {
+          return ([
+            <td>
+              { this.state.number_plate }
+              <input class="form-control" type="hidden" size="6" name="number_plate" value={ this.state.number_plate }/>
+              <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.state.number_plate_id }/>
+            </td>,
+            <td>
+              { this.state.owner }
+              <input class="form-control" type="hidden" size="6" name="owner" value={ this.state.owner }/>
+              <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.state.owner_id }/>
+            </td>
+          ]);
+        }
+     };
+
+     class NumberPlateTable extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            new_number_plate: '',
+            new_owner_id: '-1',
+            error_message: null,
+            number_plates: [
+              {% for number_plate in number_plates %}
+                {
+                  'number_plate_id': '{{ number_plate.pk }}',
+                  'number_plate': '{{ number_plate }}',
+                  'owner': '{{ number_plate.owner }}',
+                  'owner_id': '{{ number_plate.owner.pk }}',
+                  'deleted': false
+                },
+              {% endfor %}
+              ],
+            owner_options: {
+              {% for owner in owners %}
+                {{ owner.pk }}: "{{ owner }}",
+              {% endfor %}
+            }
+          };
+
+          this.resetNewNumberPlateState = this.resetNewNumberPlateState.bind(this);
+          this.handleOwnerChange = this.handleOwnerChange.bind(this);
+          this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
+          this.handleNew = this.handleNew.bind(this);
+        };
+
+        resetNewNumberPlateState() {
+          this.setState({new_number_plate: '', new_owner_id: '-1'});
+        };
+
+        handleOwnerChange(event) {
+          this.setState({new_owner_id: event.target.value});
+        };
+
+        handleNumberPlateChange(event) {
+          this.setState({new_number_plate: event.target.value});
+        };
+
+        toggleEditable(event) {
+        };
+
+        handleDelete(event) {
+          function handleDELETEResponse(resp) {
+              var number_plates = [];
+              for (var i=0; i < this.state.number_plates.length; i++) {
+                if (this.state.number_plates[i].number_plate_id === event) {
+                    this.state.number_plates[i].deleted = true;
+                };
+                number_plates.push(this.state.number_plates[i]);
+              };
+              this.setState({number_plates: number_plates});
+          };
+          handleDELETEResponse = handleDELETEResponse.bind(this);
+
+          fetch('/api/numberplates/' + event + '/', {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          }).then(handleDELETEResponse);
+
+        };
+
+        handleNew(event) {
+          event.preventDefault();
+          function handlePOSTResponse(resp) {
+            var new_element = {owner_id: this.state.new_owner_id, number_plate:
+            this.state.new_number_plate, number_plate_id: '-1', owner:
+            this.state.owner_options[this.state.new_owner_id]};
+            this.setState({number_plates: [...this.state.number_plates, new_element]});
+
+            this.resetNewNumberPlateState();
+          };
+          handlePOSTResponse = handlePOSTResponse.bind(this);
+
+          fetch('/api/numberplates/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'owner': '/api/owners/' + this.state.new_owner_id + '/',
+              'number': this.state.new_number_plate})
+            }).then(handlePOSTResponse).catch(function (err) {
+                this.setState({error_message: err});
+            });
+        };
+
+        render() {
+            return ([
+              <tr>
+                <td colspan="3">
+                  <form onSubmit={ this.handleNew }>
+                    {% csrf_token %}
+                    <div class="input-group">
+                      <input id='number_plate' class="form-control" type="text" name="number_plate" placeholder="Car plate"
+                             size="10" aria-describedby="button-addon1" onChange={this.handleNumberPlateChange} value={ this.state.new_number_plate } />
+                      <select id='owner' ref='owner' name='owner' class="custom-select" id="inputGroupSelect02" value={this.state.new_owner_id} onChange={this.handleOwnerChange}>
+                        <option value="-1">------------</option>
+                        {% for owner in owners %}
+                          <option value="{{ owner.pk }}">{{ owner }}</option>
+                        {% endfor %}
+                      </select>
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="submit" id="button-addon1">
+                          <i class="fas fa-plus-square"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </td>
+              </tr>,
+                this.state.number_plates.map(data => {
+                  if (data.deleted === true) return null;
+                  return <tr>
+                    <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id}
+                                 owner={data.owner} owner_id={data.owner_id} />
+                    <td>
+                        <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                          <i class="fas fa-edit"></i>
+                        </button>&nbsp;
+                        <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete.bind(this, data.number_plate_id) }>
+                          <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                  </tr>
+                })]
+            );
+        }
+     };
+
+      ReactDOM.render(
+        <NumberPlateTable />,
+        document.getElementById('number-plate-table')
+      );
+
+
+    </script>
+
 </head>
 
 <body>
   <div style="width:500px; margin:5% auto;">
+
     <div style="margin-bottom: 30px;">
-      <table class='table-striped table-bordered' cellpadding="10">
+      <table id="number-plates-tbl" class='table-striped table-bordered' cellpadding="10">
         <thead>
           <tr>
             <th>Car number plate</th>
@@ -18,48 +217,12 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td colspan="3">
-              <div class="input-group">
-                <input class="form-control" type="text" name="fname" placeholder="Car plate" size="10" aria-describedby="button-addon1">
-                <select class="custom-select" id="inputGroupSelect02">
-                  <option value="-1">------------</option>
-                  {% for owner in owners %}
-                    <option value="{{ owner.pk }}">{{ owner }}</option>
-                  {% endfor %}
-                </select>
-                <div class="input-group-append">
-                  <button class="btn btn-outline-primary" type="button" id="button-addon1">
-                    <i class="fas fa-plus-square"></i>
-                  </button>
-                </div>
-              </div>
-            </td>
-          </tr>
-          {% for number_plate in number_plates %}
-            <tr>
-              <td>{{ number_plate }}</td>
-              <td>{{ number_plate.owner }}</td>
-            <td>
-                  <!-- <button class="btn btn&#45;outline&#45;primary" type="button" id="button&#45;addon3"> -->
-                  <!--   <i class="fas fa&#45;check"></i> -->
-                  <!-- </button> -->
-                  <button class="btn btn-outline-primary" type="button" id="button-addon3">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="btn btn-outline-danger" type="button" id="button-addon3">
-                    <i class="fas fa-trash"></i>
-                  </button>
-            </td>
-            </tr>
-          {% endfor %}
-        </tbody>
+        <tbody id="number-plate-table"/>
       </table>
     </div>
 
     <div>
-      <table class='table-striped table-bordered' cellpadding="10" >
+      <table id="owners" class='table-striped table-bordered' cellpadding="10">
         <thead>
           <tr>
             <th>Owner</th>
@@ -71,8 +234,8 @@
           <tr>
             <td colspan="3">
               <div class="input-group">
-                <input class="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2">
-                <input class="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2">
+                <input id='first_name' class="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2">
+                <input id='last_name' class="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2">
                 <div class="input-group-append">
                   <button class="btn btn-outline-primary" type="button" id="button-addon2">
                     <i class="fas fa-plus-square"></i>
@@ -92,9 +255,6 @@
                   {{ owner.number_plate.all|join:", "|truncatechars:28 }}
               </td>
               <td>
-                  <!-- <button class="btn btn&#45;outline&#45;primary" type="button" id="button&#45;addon3"> -->
-                  <!--   <i class="fas fa&#45;check"></i> -->
-                  <!-- </button> -->
                   <button class="btn btn-outline-primary" type="button" id="button-addon3">
                     <i class="fas fa-edit"></i>
                   </button>
