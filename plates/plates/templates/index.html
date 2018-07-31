@@ -1,94 +1,94 @@
 <html>
 <head>
-    <title>Car Number Plates</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://fb.me/react-15.0.0.js"></script>
-    <script type="text/javascript" src="https://fb.me/react-dom-15.0.0.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.1/prop-types.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/16.3.2/umd/react.production.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react-dom/16.3.2/umd/react-dom.production.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.min.js"></script>
-    <style>
-     form {
-       display: inline;
-     }
-     #owner-edit {
-       max-width: 100%;
-     }
-     table {
-        width: 500px;
-        table-layout: fixed;
-        margin-bottom: 30px;
-     }
-    </style>
+  <title>Car Number Plates</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://fb.me/react-15.0.0.js"></script>
+  <script type="text/javascript" src="https://fb.me/react-dom-15.0.0.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.1/prop-types.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/16.3.2/umd/react.production.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react-dom/16.3.2/umd/react-dom.production.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.min.js"></script>
+  <style>
+    form {
+      display: inline;
+    }
+    #owner-edit {
+      max-width: 100%;
+    }
+    table {
+      width: 500px;
+      table-layout: fixed;
+      margin-bottom: 30px;
+    }
+  </style>
 
 
-    <script type="text/babel">
-     class NumberPlate extends React.Component {
-        constructor(props) {
-            super(props);
-            this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
-            this.handleOwnerChange = this.handleOwnerChange.bind(this);
-            this.handleDelete = this.handleDelete.bind(this);
-            this.toggleEditable = this.toggleEditable.bind(this);
+  <script type="text/babel">
+    class NumberPlate extends React.Component {
+      constructor(props) {
+        super(props);
+          this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
+          this.handleOwnerChange = this.handleOwnerChange.bind(this);
+          this.handleDelete = this.handleDelete.bind(this);
+          this.toggleEditable = this.toggleEditable.bind(this);
         };
         handleNumberPlateChange(event) {
-            this.props.edit_number_plate({
-              "number_plate": event.target.value,
-              "number_plate_id": this.props.number_plate_id,
-              "owner_id": this.props.owner_id,
-              "owner": this.props.owner,
-              "deleted": this.props.deleted,
-              "editable": this.props.editable
-            });
+          this.props.edit_number_plate({
+            "number_plate": event.target.value,
+            "number_plate_id": this.props.number_plate_id,
+            "owner_id": this.props.owner_id,
+            "owner": this.props.owner,
+            "deleted": this.props.deleted,
+            "editable": this.props.editable
+          });
         };
         handleOwnerChange(event) {
-            var owner = '';
-            for (var i=0; i < this.props.owners.length; i++) {
-                if (this.props.owners[i].owner_id === event.target.value) {
-                    owner = this.props.owners[i].first_name + ' ' + this.props.owners[i].last_name;
-                    break;
-                };
+          var owner = '';
+          for (var i=0; i < this.props.owners.length; i++) {
+            if (this.props.owners[i].owner_id === event.target.value) {
+              owner = this.props.owners[i].first_name + ' ' + this.props.owners[i].last_name;
+              break;
             };
-            this.props.edit_number_plate({
-              "number_plate": this.props.number_plate,
-              "number_plate_id": this.props.number_plate_id,
-              "owner_id": event.target.value,
-              "owner": owner,
-              "deleted": this.props.deleted,
-              "editable": this.props.editable
-            });
+          };
+          this.props.edit_number_plate({
+            "number_plate": this.props.number_plate,
+            "number_plate_id": this.props.number_plate_id,
+            "owner_id": event.target.value,
+            "owner": owner,
+            "deleted": this.props.deleted,
+            "editable": this.props.editable
+          });
         };
 
         toggleEditable(event) {
-            if (this.props.editable === true) {
-              fetch('/api/numberplates/'+ this.props.number_plate_id + '/' , {
-                method: 'PATCH',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  'owner': '/api/owners/' + this.props.owner_id + '/',
-                  'number': this.props.number_plate,
-                  'id': this.props.number_plate_id})
+          if (this.props.editable === true) {
+            fetch('/api/numberplates/'+ this.props.number_plate_id + '/' , {
+              method: 'PATCH',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                'owner': '/api/owners/' + this.props.owner_id + '/',
+                'number': this.props.number_plate,
+                'id': this.props.number_plate_id})
               }).then(function (resp) {
               }).catch(function (err) {
-              });
-            };
-            this.props.edit_number_plate({
-              "number_plate": this.props.number_plate,
-              "number_plate_id": this.props.number_plate_id,
-              "owner_id": this.props.owner_id,
-              "owner": this.props.owner,
-              "deleted": this.props.deleted,
-              "editable": !this.props.editable
             });
+          };
+          this.props.edit_number_plate({
+            "number_plate": this.props.number_plate,
+            "number_plate_id": this.props.number_plate_id,
+            "owner_id": this.props.owner_id,
+            "owner": this.props.owner,
+            "deleted": this.props.deleted,
+            "editable": !this.props.editable
+          });
         };
 
         handleDelete(event) {
@@ -101,7 +101,6 @@
               "deleted": true,
               "editable": this.props.editable
             });
-
           };
           handleDELETEResponse = handleDELETEResponse.bind(this);
 
@@ -116,7 +115,6 @@
 
         render() {
           if (this.props.deleted === true) return null;
-
           if (this.props.editable === true) {
             return (
             <tr>
@@ -126,16 +124,16 @@
               </td>
               <td>
                 <select id='owner-edit' ref='owner' name='owner' class="custom-select" value={this.props.owner_id} onChange={this.handleOwnerChange}>
-                    <OwnerOptions owners={ this.props.owners } show_no_selection={ false } />
+                  <OwnerOptions owners={ this.props.owners } show_no_selection={ false } />
                 </select>
               </td>
               <td>
-                  <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                    <i class="fas fa-save"></i>
-                  </button>&nbsp;
-                  <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                    <i class="fas fa-trash"></i>
-                  </button>
+                <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                  <i class="fas fa-save"></i>
+                </button>&nbsp;
+                <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                  <i class="fas fa-trash"></i>
+                </button>
               </td>
             </tr>
             );
@@ -153,12 +151,12 @@
               <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/>
             </td>
             <td>
-                <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                  <i class="fas fa-edit"></i>
-                </button>&nbsp;
-                <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                  <i class="fas fa-trash"></i>
-                </button>
+              <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                <i class="fas fa-edit"></i>
+              </button>&nbsp;
+              <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                <i class="fas fa-trash"></i>
+              </button>
             </td>
           </tr>
           );
@@ -166,200 +164,203 @@
      };
 
     class OwnerOptions extends React.Component {
-        render() {
-            if (this.props.show_no_selection === true) {
-                return ([
-                    <option value="-1">------------</option>,
-                    this.props.owners.map(function(owner) {
-                      if (owner.deleted === true) return null;
-                      return <option value={ owner.owner_id }>{ owner.first_name } { owner.last_name }</option>
-                    })
-                ])
-            };
-            return (this.props.owners.map(function(owner) {
-                if (owner.deleted === true) return null;
-                return <option value={ owner.owner_id }>{ owner.first_name } { owner.last_name }</option>
-                }))
+      render() {
+        if (this.props.show_no_selection === true) {
+          return ([
+            <option value="-1">------------</option>,
+            this.props.owners.map(function(owner) {
+              if (owner.deleted === true) return null;
+              return <option value={ owner.owner_id }>{ owner.first_name } { owner.last_name }</option>
+            })
+          ])
         };
+        return (this.props.owners.map(function(owner) {
+          if (owner.deleted === true) return null;
+          return <option value={ owner.owner_id }>{ owner.first_name } { owner.last_name }</option>
+        }))
+      };
     };
 
-     class NumberPlateTable extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = {
-            new_number_plate: '',
-            new_owner_id: '-1',
-            error_message: null,
-          };
-
-          this.resetNewNumberPlateState = this.resetNewNumberPlateState.bind(this);
-          this.handleOwnerChange = this.handleOwnerChange.bind(this);
-          this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
-          this.handleCreate = this.handleCreate.bind(this);
+    class NumberPlateTable extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          new_number_plate: '',
+          new_owner_id: '-1',
+          error_message: null,
         };
 
-        resetNewNumberPlateState() {
-          this.setState({new_number_plate: '', new_owner_id: '-1'});
-        };
+        this.resetNewNumberPlateState = this.resetNewNumberPlateState.bind(this);
+        this.handleOwnerChange = this.handleOwnerChange.bind(this);
+        this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
+        this.handleCreate = this.handleCreate.bind(this);
+      };
 
-        handleOwnerChange(event) {
-          this.setState({new_owner_id: event.target.value});
-        };
+      resetNewNumberPlateState() {
+        this.setState({new_number_plate: '', new_owner_id: '-1'});
+      };
 
-        handleNumberPlateChange(event) {
-          this.setState({new_number_plate: event.target.value});
-        };
+      handleOwnerChange(event) {
+        this.setState({new_owner_id: event.target.value});
+      };
 
-        handleCreate(event) {
-          event.preventDefault();
-          function handlePOSTResponse(resp) {
-            if (resp.status == 201) {
-              resp.json().then(json => {
-                var new_element = {
-                  owner_id: this.state.new_owner_id,
-                  number_plate: this.state.new_number_plate,
-                  number_plate_id: json['id'].toString(),
+      handleNumberPlateChange(event) {
+        this.setState({new_number_plate: event.target.value});
+      };
+
+      handleCreate(event) {
+        event.preventDefault();
+        function handlePOSTResponse(resp) {
+          if (resp.status == 201) {
+            resp.json().then(json => {
+              var new_element = {
+                owner_id: this.state.new_owner_id,
+                number_plate: this.state.new_number_plate,
+                number_plate_id: json['id'].toString(),
+              };
+
+              for (var i=0; i < this.props.owners.length; i++) {
+                if (this.props.owners[i].owner_id === this.state.new_owner_id) {
+                  new_element['owner'] = this.props.owners[i].first_name + ' ' + this.props.owners[i].last_name;
+                  break;
                 };
-
-                for (var i=0; i < this.props.owners.length; i++) {
-                    if (this.props.owners[i].owner_id === this.state.new_owner_id) {
-                        new_element['owner'] = this.props.owners[i].first_name + ' ' + this.props.owners[i].last_name;
-                        break;
-                    };
-                };
-                this.props.add_number_plate(new_element);
-                this.resetNewNumberPlateState();
-              });
-            } else {
-                this.setState({error_message: 'All fields must be filled'});
-            };
+              };
+              this.props.add_number_plate(new_element);
+              this.resetNewNumberPlateState();
+            });
+          } else {
+            this.setState({error_message: 'All fields must be filled'});
           };
-          handlePOSTResponse = handlePOSTResponse.bind(this);
+        };
+        handlePOSTResponse = handlePOSTResponse.bind(this);
 
-          fetch('/api/numberplates/', {
-            method: 'POST',
+        fetch('/api/numberplates/', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            'owner': '/api/owners/' + this.state.new_owner_id + '/',
+            'number': this.state.new_number_plate
+          })
+        }).then(handlePOSTResponse).catch(function (err) {
+          this.setState({error_message: err});
+        });
+      };
+
+      render() {
+        return ([
+          <tr>
+            <td colspan="3">
+              <form onSubmit={ this.handleCreate }>
+                {% csrf_token %}
+                <div class="input-group">
+                  <input id='number_plate' class="form-control" type="text" name="number_plate" placeholder="Car plate"
+                         size="10" aria-describedby="button-addon1" onChange={this.handleNumberPlateChange} value={ this.state.new_number_plate } />
+                  <select id='owner' ref='owner' name='owner' class="custom-select" id="inputGroupSelect02" value={ this.state.new_owner_id } onChange={this.handleOwnerChange}>
+                    <OwnerOptions owners={ this.props.owners } show_no_selection={ true } />
+                  </select>
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit" id="button-addon1">
+                      <i class="fas fa-plus-square"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </td>
+          </tr>,
+          this.props.number_plates.map(data => {
+            return <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id} owners={ this.props.owners }
+                                owner={data.owner} owner_id={data.owner_id} deleted={data.deleted} editable={ data.editable }
+                                edit_number_plate={this.props.edit_number_plate} />
+          })
+        ]);
+      }
+    };
+
+    class Owner extends React.Component {
+      constructor(props) {
+        super(props);
+        this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+        this.handleLastNameChange = this.handleLastNameChange.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.toggleEditable = this.toggleEditable.bind(this);
+      };
+
+      handleFirstNameChange(event) {
+        this.props.edit_owner({
+          owner_id: this.props.owner_id,
+          first_name: event.target.value,
+          last_name: this.props.last_name,
+          deleted: this.props.deleted,
+          editable: this.props.editable
+        })
+      };
+
+      handleLastNameChange(event) {
+        this.props.edit_owner({
+          owner_id: this.props.owner_id,
+          first_name: this.props.first_name,
+          last_name: event.target.value,
+          deleted: this.props.deleted,
+          editable: this.props.editable
+        })
+      };
+
+      toggleEditable(event) {
+        if (this.props.editable === true) {
+          fetch('/api/owners/'+ this.props.owner_id + '/' , {
+            method: 'PATCH',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              'owner': '/api/owners/' + this.state.new_owner_id + '/',
-              'number': this.state.new_number_plate})
-            }).then(handlePOSTResponse).catch(function (err) {
-                this.setState({error_message: err});
+              'first_name': this.props.first_name,
+              'last_name': this.props.last_name,
+              'id': this.props.owner_id})
+            }).then(function (resp) {
+              resp.json().then(json => {
             });
+          }).catch(function (err) {
+          });
         };
 
-        render() {
-            return ([
-              <tr>
-                <td colspan="3">
-                  <form onSubmit={ this.handleCreate }>
-                    {% csrf_token %}
-                    <div class="input-group">
-                      <input id='number_plate' class="form-control" type="text" name="number_plate" placeholder="Car plate"
-                             size="10" aria-describedby="button-addon1" onChange={this.handleNumberPlateChange} value={ this.state.new_number_plate } />
-                      <select id='owner' ref='owner' name='owner' class="custom-select" id="inputGroupSelect02" value={ this.state.new_owner_id } onChange={this.handleOwnerChange}>
-                        <OwnerOptions owners={ this.props.owners } show_no_selection={ true } />
-                      </select>
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-primary" type="submit" id="button-addon1">
-                          <i class="fas fa-plus-square"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </td>
-              </tr>,
-                this.props.number_plates.map(data => {
-                  return <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id} owners={ this.props.owners }
-                                 owner={data.owner} owner_id={data.owner_id} deleted={data.deleted} editable={ data.editable } edit_number_plate={this.props.edit_number_plate} />
-                })]
-            );
-        }
-     };
+        this.props.edit_owner({
+          owner_id: this.props.owner_id,
+          first_name: this.props.first_name,
+          last_name: this.props.last_name,
+          deleted: this.props.deleted,
+          editable: !this.props.editable
+        })
+      };
 
-     class Owner extends React.Component {
-        constructor(props) {
-          super(props);
-          this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-          this.handleLastNameChange = this.handleLastNameChange.bind(this);
-          this.handleDelete = this.handleDelete.bind(this);
-          this.toggleEditable = this.toggleEditable.bind(this);
+      handleDelete(event) {
+        function handleDELETEResponse(resp) {
+          this.props.edit_owner({
+            owner_id: this.props.owner_id,
+            first_name: this.props.first_name,
+            last_name: this.props.last_name,
+            deleted: true,
+            editable: !this.props.editable
+          })
         };
+        handleDELETEResponse = handleDELETEResponse.bind(this);
 
-        handleFirstNameChange(event) {
-            this.props.edit_owner({
-              owner_id: this.props.owner_id,
-              first_name: event.target.value,
-              last_name: this.props.last_name,
-              deleted: this.props.deleted,
-              editable: this.props.editable
-            })
-        };
-        handleLastNameChange(event) {
-            this.props.edit_owner({
-              owner_id: this.props.owner_id,
-              first_name: this.props.first_name,
-              last_name: event.target.value,
-              deleted: this.props.deleted,
-              editable: this.props.editable
-            })
-        };
-        toggleEditable(event) {
-        console.log(this.props.editable);
-            if (this.props.editable === true) {
-              fetch('/api/owners/'+ this.props.owner_id + '/' , {
-                method: 'PATCH',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  'first_name': this.props.first_name,
-                  'last_name': this.props.last_name,
-                  'id': this.props.owner_id})
-              }).then(function (resp) {
-                resp.json().then(json => {
-                });
-              }).catch(function (err) {
-              });
-            };
+        fetch('/api/owners/' + this.props.owner_id + '/', {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+        }).then(handleDELETEResponse);
+      };
 
-            this.props.edit_owner({
-              owner_id: this.props.owner_id,
-              first_name: this.props.first_name,
-              last_name: this.props.last_name,
-              deleted: this.props.deleted,
-              editable: !this.props.editable
-            })
-        };
-
-        handleDelete(event) {
-          function handleDELETEResponse(resp) {
-            this.props.edit_owner({
-              owner_id: this.props.owner_id,
-              first_name: this.props.first_name,
-              last_name: this.props.last_name,
-              deleted: true,
-              editable: !this.props.editable
-            })
-          };
-          handleDELETEResponse = handleDELETEResponse.bind(this);
-
-          fetch('/api/owners/' + this.props.owner_id + '/', {
-            method: 'DELETE',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-          }).then(handleDELETEResponse);
-        };
-
-        render() {
-          if (this.props.deleted === true) return null;
-          if (this.props.editable === true) {
-            return (
+      render() {
+        if (this.props.deleted === true) return null;
+        if (this.props.editable === true) {
+          return (
             <tr>
               <td>
                 <div class="input-group">
@@ -368,112 +369,118 @@
                 </div>
               </td>
               <td>
-                  <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                    <i class="fas fa-save"></i>
-                  </button>&nbsp;
-                  <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                    <i class="fas fa-trash"></i>
-                  </button>
-              </td>
-            </tr>
-            );
-          };
-          return (
-            <tr>
-              <td>
-              <div class="input-group">
-                <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/> { this.props.first_name }&nbsp;{ this.props.last_name }
-              </div>
-              </td>
-              <td>
-                  <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                    <i class="fas fa-edit"></i>
-                  </button>&nbsp;
-                  <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                    <i class="fas fa-trash"></i>
-                  </button>
+                <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                  <i class="fas fa-save"></i>
+                </button>&nbsp;
+                <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                  <i class="fas fa-trash"></i>
+                </button>
               </td>
             </tr>
           );
         };
+        return (
+          <tr>
+            <td>
+              <div class="input-group">
+                <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/> { this.props.first_name }&nbsp;{ this.props.last_name }
+              </div>
+            </td>
+            <td>
+              <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                <i class="fas fa-edit"></i>
+              </button>&nbsp;
+              <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        );
       };
-
-     class OwnerTable extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = {
-            new_first_name: '',
-            new_last_name: '',
-            error_message: '',
-          };
-
-          this.resetNewOwnerState = this.resetNewOwnerState.bind(this);
-          this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-          this.handleLastNameChange = this.handleLastNameChange.bind(this);
-          this.handleCreate = this.handleCreate.bind(this);
-        };
-
-        resetNewOwnerState(event) {
-            this.setState({new_first_name: '', new_last_name: ''});
-        };
-        handleFirstNameChange(event) { this.setState({new_first_name: event.target.value}); };
-        handleLastNameChange(event) { this.setState({new_last_name: event.target.value}); };
-        handleCreate(event) {
-          event.preventDefault();
-
-          function handlePOSTResponse(resp) {
-            resp.json().then(json => {
-              var new_element = {
-                owner_id: json['id'].toString(),
-                first_name: this.state.new_first_name,
-                last_name: this.state.new_last_name,
-              };
-              this.resetNewOwnerState();
-              this.props.add_owner(new_element);
-            });
-          };
-          handlePOSTResponse = handlePOSTResponse.bind(this);
-
-          fetch('/api/owners/', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              first_name: this.state.new_first_name,
-              last_name: this.state.new_last_name,
-              'number_plate': []})
-            }).then(handlePOSTResponse).catch(function (err) {
-                this.setState({error_message: err});
-            });
-        };
-
-        render() {
-            return ([
-            <tr>
-              <td colspan="2">
-                <form onSubmit={ this.handleCreate }>
-                  <div class="input-group">
-                    <input id='first_name' class="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2" value={this.state.new_first_name} onChange={this.handleFirstNameChange} />
-                    <input id='last_name' class="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2" value={this.state.new_last_name} onChange={this.handleLastNameChange} />
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-primary" type="submit" id="button-addon2">
-                        <i class="fas fa-plus-square"></i>
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </td>
-            </tr>,
-                this.props.owners.map(data => {
-                  return <Owner first_name={data.first_name} last_name={data.last_name} owner_id={data.owner_id}
-                                 deleted={data.deleted} editable={ data.editable } edit_owner={ this.props.edit_owner }/>
-                })]
-            );
-        }
     };
 
+    class OwnerTable extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          new_first_name: '',
+          new_last_name: '',
+          error_message: '',
+        };
+
+        this.resetNewOwnerState = this.resetNewOwnerState.bind(this);
+        this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+        this.handleLastNameChange = this.handleLastNameChange.bind(this);
+        this.handleCreate = this.handleCreate.bind(this);
+      };
+
+      resetNewOwnerState(event) {
+        this.setState({new_first_name: '', new_last_name: ''});
+      };
+
+      handleFirstNameChange(event) {
+        this.setState({new_first_name: event.target.value});
+      };
+
+      handleLastNameChange(event) {
+        this.setState({new_last_name: event.target.value});
+      };
+
+      handleCreate(event) {
+        event.preventDefault();
+
+        function handlePOSTResponse(resp) {
+          resp.json().then(json => {
+            var new_element = {
+              owner_id: json['id'].toString(),
+              first_name: this.state.new_first_name,
+              last_name: this.state.new_last_name,
+            };
+            this.resetNewOwnerState();
+            this.props.add_owner(new_element);
+          });
+        };
+        handlePOSTResponse = handlePOSTResponse.bind(this);
+
+        fetch('/api/owners/', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            first_name: this.state.new_first_name,
+            last_name: this.state.new_last_name,
+            number_plate: []
+          })
+        }).then(handlePOSTResponse).catch(function (err) {
+          this.setState({error_message: err});
+        });
+      };
+
+      render() {
+        return ([
+          <tr>
+            <td colspan="2">
+              <form onSubmit={ this.handleCreate }>
+                <div class="input-group">
+                  <input id='first_name' class="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2" value={this.state.new_first_name} onChange={this.handleFirstNameChange} />
+                  <input id='last_name' class="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2" value={this.state.new_last_name} onChange={this.handleLastNameChange} />
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit" id="button-addon2">
+                      <i class="fas fa-plus-square"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </td>
+          </tr>,
+          this.props.owners.map(data => {
+            return <Owner first_name={data.first_name} last_name={data.last_name} owner_id={data.owner_id}
+                          deleted={data.deleted} editable={ data.editable } edit_owner={ this.props.edit_owner }/>
+        })]);
+      }
+    };
 
     class OwnerAndNumberPlateTables extends React.Component {
       constructor(props) {
@@ -511,62 +518,59 @@
       };
 
       handleNumberPlateChange(number_plate) {
-          var number_plates = [];
-          for (var i=0; i < this.state.number_plates.length; i++) {
-              if (number_plate["number_plate_id"] === this.state.number_plates[i].number_plate_id) {
-                  number_plates.push(number_plate);
-              } else {
-                  number_plates.push(this.state.number_plates[i]);
-              };
+        var number_plates = [];
+        for (var i=0; i < this.state.number_plates.length; i++) {
+          if (number_plate["number_plate_id"] === this.state.number_plates[i].number_plate_id) {
+            number_plates.push(number_plate);
+          } else {
+            number_plates.push(this.state.number_plates[i]);
           };
-          this.setState({number_plates: number_plates});
+        };
+        this.setState({number_plates: number_plates});
       };
 
       handleOwnerChange(owner) {
         var owners = [];
         for (var i=0; i < this.state.owners.length; i++ ){
-            if (this.state.owners[i].owner_id === owner.owner_id) {
-                owners.push(owner);
-                var number_plates = [];
-                for (var j=0; j < this.state.number_plates.length; j++) {
-                    number_plates.push(this.state.number_plates[j]);
-                    if (this.state.number_plates[j].owner_id === owner.owner_id) {
-                      number_plates[number_plates.length-1].owner = owner.first_name + ' ' + owner.last_name;
-                      if (owner.deleted === true) {
-                        number_plates[number_plates.length-1].deleted = true;
-                      };
-                    };
+          if (this.state.owners[i].owner_id === owner.owner_id) {
+            owners.push(owner);
+            var number_plates = [];
+            for (var j=0; j < this.state.number_plates.length; j++) {
+              number_plates.push(this.state.number_plates[j]);
+              if (this.state.number_plates[j].owner_id === owner.owner_id) {
+                number_plates[number_plates.length-1].owner = owner.first_name + ' ' + owner.last_name;
+                if (owner.deleted === true) {
+                  number_plates[number_plates.length-1].deleted = true;
                 };
-                this.setState({number_plates: number_plates});
-                // };
-            } else {
-                owners.push(this.state.owners[i]);
+              };
             };
+            this.setState({number_plates: number_plates});
+          } else {
+            owners.push(this.state.owners[i]);
+          };
         };
         this.setState({owners: owners});
       };
 
       handleNewOwner(new_owner) {
         this.setState({owners: [...this.state.owners, {
-               'owner_id': new_owner.owner_id.toString(),
-               'first_name': new_owner.first_name,
-               'last_name': new_owner.last_name,
-               'deleted': false,
-               'editable': false
-           }
-        ]});
+          'owner_id': new_owner.owner_id.toString(),
+          'first_name': new_owner.first_name,
+          'last_name': new_owner.last_name,
+          'deleted': false,
+          'editable': false
+        }]});
       };
 
       handleNewNumberPlate(new_number_plate) {
         this.setState({number_plates: [...this.state.number_plates, {
-                  'number_plate_id': new_number_plate.number_plate_id,
-                  'number_plate': new_number_plate.number_plate,
-                  'owner': new_number_plate.owner,
-                  'owner_id': new_number_plate.owner_id,
-                  'deleted': false,
-                  'editable': false
-           }
-        ]});
+          'number_plate_id': new_number_plate.number_plate_id,
+          'number_plate': new_number_plate.number_plate,
+          'owner': new_number_plate.owner,
+          'owner_id': new_number_plate.owner_id,
+          'deleted': false,
+          'editable': false
+        }]});
       };
 
       render() {
@@ -599,14 +603,15 @@
               <tbody id="number-plate-table"/>
             </table>
           </div>
-      ])};
+        ])
+      };
     };
 
     ReactDOM.render(
       <OwnerAndNumberPlateTables />,
       document.getElementById('owner-and-number-plate-tables')
     );
-    </script>
+  </script>
 </head>
 
 <body>
