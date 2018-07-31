@@ -171,11 +171,13 @@
                 return ([
                     <option value="-1">------------</option>,
                     this.props.owners.map(function(owner) {
+                      if (owner.deleted === true) return null;
                       return <option value={ owner.owner_id }>{ owner.first_name } { owner.last_name }</option>
                     })
                 ])
             };
             return (this.props.owners.map(function(owner) {
+                if (owner.deleted === true) return null;
                 return <option value={ owner.owner_id }>{ owner.first_name } { owner.last_name }</option>
                 }))
         };
