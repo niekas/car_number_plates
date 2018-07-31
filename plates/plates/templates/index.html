@@ -23,25 +23,12 @@
      table {
         width: 500px;
         table-layout: fixed;
+        margin-bottom: 30px;
      }
     </style>
 
 
     <script type="text/babel">
-    var owner_options = [
-      ["-1", "------------"],
-      {% for owner in owners %}
-        [{{ owner.pk }}, "{{ owner }}"],
-      {% endfor %}
-    ];
-
-    function get_owner(key) {
-      for (var i=0; i < owner_options.length; i++) {
-        if (owner_options[i][0] == key) {
-            return owner_options[i][1];
-        };
-      };
-    };
 
      class NumberPlate extends React.Component {
         constructor(props) {
@@ -61,7 +48,12 @@
         handleNumberPlateChange(event) {this.setState({number_plate: event.target.value});};
         handleOwnerChange(event) {
             this.setState({owner_id: event.target.value});
-            this.setState({owner: get_owner(event.target.value)});
+            for (var i=0; i < this.props.owners.length; i++) {
+                if (this.props.owners[i].owner_id == event.target.value) {
+                    this.setState({owner: this.props.owners[i].first_name + ' ' + this.props.owners[i].last_name});
+                    break;
+                };
+            };
         };
 
         toggleEditable(event) {
@@ -102,10 +94,6 @@
           if (this.state.deleted === true) return null;
 
           if (this.state.editable === true) {
-            const owner_select = owner_options.map(function(owner) {
-              if (owner[0] !== '-1')
-                return <option value={ owner[0] }>{ owner[1] }</option>
-            });
             return (
             <tr>
               <td>
@@ -114,7 +102,7 @@
               </td>
               <td>
                 <select id='owner-edit' ref='owner' name='owner' class="custom-select" value={this.state.owner_id} onChange={this.handleOwnerChange}>
-                  { owner_select }
+                    <OwnerOptions owners={ this.props.owners } show_no_selection={ false } />
                 </select>
               </td>
               <td>
@@ -152,6 +140,24 @@
           );
         }
      };
+
+    class OwnerOptions extends React.Component {
+        render() {
+            if (this.props.show_no_selection === true) {
+                console.log(this.props.owners);
+                return ([
+                    <option value="-1">------------</option>,
+                    this.props.owners.map(function(owner) {
+                      return <option value={ owner.owner_id }>{ owner.first_name } { owner.last_name }</option>
+                    })
+                ])
+            };
+            console.log(this.props.owners);
+            return (this.props.owners.map(function(owner) {
+                return <option value={ owner.owner_id }>{ owner.first_name } { owner.last_name }</option>
+                }))
+        };
+    };
 
      class NumberPlateTable extends React.Component {
         constructor(props) {
@@ -199,9 +205,17 @@
               var new_element = {
                 owner_id: this.state.new_owner_id,
                 number_plate: this.state.new_number_plate,
-                number_plate_id: json['id'],
-                owner: get_owner(this.state.new_owner_id)
+                number_plate_id: json['id'].toString(),
               };
+
+              console.log(this.state.new_owner_id, this.props.owners);
+              for (var i=0; i < this.props.owners.length; i++) {
+                  if (this.props.owners[i].owner_id === this.state.new_owner_id) {
+                      new_element['owner'] = this.props.owners[i].first_name + ' ' + this.props.owners[i].last_name;
+                      break;
+                  };
+              };
+
               this.setState({number_plates: [...this.state.number_plates, new_element]});
               this.resetNewNumberPlateState();
             });
@@ -231,11 +245,8 @@
                     <div class="input-group">
                       <input id='number_plate' class="form-control" type="text" name="number_plate" placeholder="Car plate"
                              size="10" aria-describedby="button-addon1" onChange={this.handleNumberPlateChange} value={ this.state.new_number_plate } />
-                      <select id='owner' ref='owner' name='owner' class="custom-select" id="inputGroupSelect02" value={this.state.new_owner_id} onChange={this.handleOwnerChange}>
-                        <option value="-1">------------</option>
-                        {% for owner in owners %}
-                          <option value="{{ owner.pk }}">{{ owner }}</option>
-                        {% endfor %}
+                      <select id='owner' ref='owner' name='owner' class="custom-select" id="inputGroupSelect02" value={ this.state.new_owner_id } onChange={this.handleOwnerChange}>
+                        <OwnerOptions owners={ this.props.owners } show_no_selection={ true } />
                       </select>
                       <div class="input-group-append">
                         <button class="btn btn-outline-primary" type="submit" id="button-addon1">
@@ -247,7 +258,7 @@
                 </td>
               </tr>,
                 this.state.number_plates.map(data => {
-                  return <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id}
+                  return <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id} owners={ this.props.owners }
                                  owner={data.owner} owner_id={data.owner_id} deleted={data.deleted} editable={ data.editable } />
                 })]
             );
@@ -296,6 +307,7 @@
         handleDelete(event) {
           function handleDELETEResponse(resp) {
             this.setState({deleted: true});
+            this.props.remove_owner(this.state.owner_id);
           };
           handleDELETEResponse = handleDELETEResponse.bind(this);
 
@@ -351,10 +363,6 @@
         };
       };
 
-
-
-
-
      class OwnerTable extends React.Component {
         constructor(props) {
           super(props);
@@ -362,17 +370,7 @@
             new_first_name: '',
             new_last_name: '',
             error_message: '',
-            owners: [
-              {% for owner in owners %}
-                {
-                  'owner_id': '{{ owner.pk }}',
-                  'first_name': '{{ owner.first_name }}',
-                  'last_name': '{{ owner.last_name }}',
-                  'deleted': false,
-                  'editable': false
-                },
-              {% endfor %}
-              ]
+            owners: props.owners
           };
 
           this.resetNewOwnerState = this.resetNewOwnerState.bind(this);
@@ -392,13 +390,13 @@
           function handlePOSTResponse(resp) {
             resp.json().then(json => {
               var new_element = {
-                owner_id: json['id'],
+                owner_id: json['id'].toString(),
                 first_name: this.state.new_first_name,
                 last_name: this.state.new_last_name,
               };
               this.setState({owners: [...this.state.owners, new_element]});
-              owner_options.push([json['id'], this.state.new_first_name + ' ' + this.state.new_last_name]);
               this.resetNewOwnerState();
+              this.props.add_owner(new_element);
             });
           };
           handlePOSTResponse = handlePOSTResponse.bind(this);
@@ -437,57 +435,95 @@
             </tr>,
                 this.state.owners.map(data => {
                   return <Owner first_name={data.first_name} last_name={data.last_name} owner_id={data.owner_id}
-                                 deleted={data.deleted} editable={ data.editable } />
+                                 deleted={data.deleted} editable={ data.editable } remove_owner={ this.props.remove_owner }/>
                 })]
             );
         }
     };
 
 
-      ReactDOM.render(
-        <NumberPlateTable />,
-        document.getElementById('number-plate-table')
-      );
+    class OwnerAndNumberPlateTables extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            owners: [
+              {% for owner in owners %}
+                {
+                  'owner_id': '{{ owner.pk }}',
+                  'first_name': '{{ owner.first_name }}',
+                  'last_name': '{{ owner.last_name }}',
+                  'deleted': false,
+                  'editable': false
+                },
+              {% endfor %}
+            ]
+          };
 
-      ReactDOM.render(
-        <OwnerTable />,
-        document.getElementById('owner-table')
-      );
+          this.handleNewOwner = this.handleNewOwner.bind(this);
+          this.handleRemoveOwner = this.handleRemoveOwner.bind(this);
+        };
 
+      handleNewOwner(new_owner) {
+        this.setState({owners: [...this.state.owners, {
+               'owner_id': new_owner.owner_id.toString(),
+               'first_name': new_owner.first_name,
+               'last_name': new_owner.last_name,
+               'deleted': false,
+               'editable': false
+           }
+        ]});
+      };
 
+      handleRemoveOwner(owner_id) {
+        for (var i=0; i < this.state.owners.length; i++ ){
+            if (this.state.owners[i].owner_id === owner_id) {
+                this.setState(this.state.owners.splice(i, 1));
+                break;
+            };
+        }
+      };
+
+      render() {
+        return ([
+          <div>
+            <table id="owners" class='table-striped table-bordered' cellpadding="10">
+              <thead>
+                <tr>
+                  <th>Owner</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <OwnerTable owners={ this.state.owners } add_owner={ this.handleNewOwner } remove_owner={ this.handleRemoveOwner } />
+              </tbody>
+            </table>
+          </div>,
+          <div>
+            <table id="number-plates-tbl" class='table-striped table-bordered' cellpadding="10">
+              <thead>
+                <tr>
+                  <th>Car number plate</th>
+                  <th>Owner</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <NumberPlateTable owners={ this.state.owners }/>
+              </tbody>
+              <tbody id="number-plate-table"/>
+            </table>
+          </div>
+      ])};
+    };
+
+    ReactDOM.render(
+      <OwnerAndNumberPlateTables />,
+      document.getElementById('owner-and-number-plate-tables')
+    );
     </script>
-
 </head>
 
 <body>
-  <div style="width:500px; margin:5% auto;">
-
-    <div style="margin-bottom: 30px;">
-      <table id="number-plates-tbl" class='table-striped table-bordered' cellpadding="10">
-        <thead>
-          <tr>
-            <th>Car number plate</th>
-            <th>Owner</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="number-plate-table"/>
-      </table>
-    </div>
-
-    <div>
-      <table id="owners" class='table-striped table-bordered' cellpadding="10">
-        <thead>
-          <tr>
-            <th>Owner</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="owner-table"/>
-        <tbody>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <div id="owner-and-number-plate-tables" style="width:500px; margin:5% auto;" />
 </body>
 </html>
