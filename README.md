@@ -4,9 +4,8 @@ accessable via terminal. Access to the Internet is needed when using the
 website, since JavaScript libraries are included from remote sources.
 
 ## Preparing environment in Ubuntu/Debian
-Note: these commands may need ``sudo`` rights.
 
-    $ apt-get install python3-pip python3-venv
+    $ sudo apt-get install python3-pip python3-venv
     $ python3 -m venv .
     $ bin/pip3 install -r requirements.txt  # Install Python dependencies
 
