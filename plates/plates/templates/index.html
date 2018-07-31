@@ -32,55 +32,79 @@
      class NumberPlate extends React.Component {
         constructor(props) {
           super(props);
-            this.state = {
-              owner: props.owner,
-              owner_id: props.owner_id,
-              number_plate: props.number_plate,
-              number_plate_id: props.number_plate_id,
-              deleted: props.deleted,
-              editable: props.editable
-            };
             this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
             this.handleOwnerChange = this.handleOwnerChange.bind(this);
             this.handleDelete = this.handleDelete.bind(this);
         };
-        handleNumberPlateChange(event) {this.setState({number_plate: event.target.value});};
+        handleNumberPlateChange(event) {
+            this.props.edit_number_plate({
+              "number_plate": event.target.value,
+              "number_plate_id": props.number_plate_id,
+              "owner_id": props.owner_id,
+              "owner": props.owner,
+              "deleted": props.deleted,
+              "editable": props.editable
+            });
+        };
         handleOwnerChange(event) {
-            this.setState({owner_id: event.target.value});
+            var owner = '';
             for (var i=0; i < this.props.owners.length; i++) {
-                if (this.props.owners[i].owner_id == event.target.value) {
-                    this.setState({owner: this.props.owners[i].first_name + ' ' + this.props.owners[i].last_name});
+                if (this.props.owners[i].owner_id === event.target.value) {
+                    owner = this.props.owners[i].first_name + ' ' + this.props.owners[i].last_name;
                     break;
                 };
             };
+            this.props.edit_number_plate({
+              "number_plate": this.props.number_plate,
+              "number_plate_id": this.props.number_plate_id,
+              "owner_id": event.target.value,
+              "owner": owner,
+              "deleted": this.props.deleted,
+              "editable": this.props.editable
+            });
         };
 
         toggleEditable(event) {
-            if (this.state['editable'] === true) {
-              fetch('/api/numberplates/'+ this.state.number_plate_id + '/' , {
+            if (this.props.editable === true) {
+              fetch('/api/numberplates/'+ this.props.number_plate_id + '/' , {
                 method: 'PATCH',
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                  'owner': '/api/owners/' + this.state.owner_id + '/',
-                  'number': this.state.number_plate,
-                  'id': this.state.number_plate_id})
+                  'owner': '/api/owners/' + this.props.owner_id + '/',
+                  'number': this.props.number_plate,
+                  'id': this.props.number_plate_id})
               }).then(function (resp) {
               }).catch(function (err) {
               });
             };
-            this.setState({editable: !this.state['editable']});
+            this.props.edit_number_plate({
+              "number_plate": this.props.number_plate,
+              "number_plate_id": this.props.number_plate_id,
+              "owner_id": this.props.owner_id,
+              "owner": this.props.owner,
+              "deleted": this.props.deleted,
+              "editable": !this.props.editable
+            });
         };
 
         handleDelete(event) {
           function handleDELETEResponse(resp) {
-            this.setState({deleted: true});
+            this.props.edit_number_plate({
+              "number_plate": this.props.number_plate,
+              "number_plate_id": this.props.number_plate_id,
+              "owner_id": this.props.owner_id,
+              "owner": this.props.owner,
+              "deleted": true,
+              "editable": this.props.editable
+            });
+
           };
           handleDELETEResponse = handleDELETEResponse.bind(this);
 
-          fetch('/api/numberplates/' + this.state.number_plate_id + '/', {
+          fetch('/api/numberplates/' + this.props.number_plate_id + '/', {
             method: 'DELETE',
             headers: {
               'Accept': 'application/json',
@@ -90,22 +114,22 @@
         };
 
         render() {
-          if (this.state.deleted === true) return null;
+          if (this.props.deleted === true) return null;
 
-          if (this.state.editable === true) {
+          if (this.props.editable === true) {
             return (
             <tr>
               <td>
-                <input class="form-control" size="6" name="number_plate"  onChange={ this.handleNumberPlateChange } value={ this.state.number_plate }/>
-                <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.state.number_plate_id }/>
+                <input class="form-control" size="6" name="number_plate" onChange={ this.handleNumberPlateChange } value={ this.props.number_plate }/>
+                <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
               </td>
               <td>
-                <select id='owner-edit' ref='owner' name='owner' class="custom-select" value={this.state.owner_id} onChange={this.handleOwnerChange}>
+                <select id='owner-edit' ref='owner' name='owner' class="custom-select" value={this.props.owner_id} onChange={this.handleOwnerChange}>
                     <OwnerOptions owners={ this.props.owners } show_no_selection={ false } />
                 </select>
               </td>
               <td>
-                  <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, this.state.number_plate_id) }>
+                  <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, this.props.number_plate_id) }>
                     <i class="fas fa-save"></i>
                   </button>&nbsp;
                   <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
@@ -118,17 +142,17 @@
           return (
           <tr>
             <td>
-              { this.state.number_plate }
-              <input class="form-control" type="hidden" size="6" name="number_plate" value={ this.state.number_plate }/>
-              <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.state.number_plate_id }/>
+              { this.props.number_plate }
+              <input class="form-control" type="hidden" size="6" name="number_plate" value={ this.props.number_plate }/>
+              <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
             </td>
             <td>
-              { this.state.owner }
-              <input class="form-control" type="hidden" size="6" name="owner" value={ this.state.owner }/>
-              <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.state.owner_id }/>
+              { this.props.owner }
+              <input class="form-control" type="hidden" size="6" name="owner" value={ this.props.owner }/>
+              <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/>
             </td>
             <td>
-                <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, this.state.number_plate_id) }>
+                <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable.bind(this, this.props.number_plate_id) }>
                   <i class="fas fa-edit"></i>
                 </button>&nbsp;
                 <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
@@ -246,7 +270,7 @@
               </tr>,
                 this.props.number_plates.map(data => {
                   return <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id} owners={ this.props.owners }
-                                 owner={data.owner} owner_id={data.owner_id} deleted={data.deleted} editable={ data.editable } />
+                                 owner={data.owner} owner_id={data.owner_id} deleted={data.deleted} editable={ data.editable } edit_number_plate={this.props.edit_number_plate} />
                 })]
             );
         }
@@ -333,7 +357,7 @@
               <td>
               <div class="input-group">
                 <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.state.owner_id }/>
-                { this.state.first_name } { this.state.last_name }
+                { this.state.first_name }&nbsp;{ this.state.last_name }
               </div>
               </td>
               <td>
@@ -460,6 +484,19 @@
           this.handleNewOwner = this.handleNewOwner.bind(this);
           this.handleRemoveOwner = this.handleRemoveOwner.bind(this);
           this.handleNewNumberPlate = this.handleNewNumberPlate.bind(this);
+          this.handleNumberPlateChange = this.handleNumberPlateChange(this);
+        };
+
+        handleNumberPlateChange(number_plate) {
+            var number_plates = [];
+            for (var i=0; i < this.state.number_plates.length; i++) {
+                if (number_plate["number_plate_id"] === this.state.number_plates[i].number_plate_id) {
+                    number_plates.push(number_plate);
+                } else {
+                    number_plates.push(this.state.number_plates[i]);
+                };
+            };
+            this.setState({number_plates: number_plates});
         };
 
       handleNewOwner(new_owner) {
@@ -491,8 +528,9 @@
                 this.setState(this.state.owners.splice(i, 1));
                 var number_plates = [];
                 for (var j=0; j < this.state.number_plates.length; j++) {
-                    if (this.state.number_plates[j].owner_id !== owner_id) {
-                        number_plates.push(this.state.number_plates[j]);
+                    number_plates.push(this.state.number_plates[j]);
+                    if (this.state.number_plates[j].owner_id === owner_id) {
+                        number_plates[number_plates.length-1].deleted = true;
                     };
                 };
                 this.setState({number_plates: number_plates});
@@ -526,8 +564,7 @@
                 </tr>
               </thead>
               <tbody>
-                <NumberPlateTable owners={ this.state.owners } number_plates={
-                this.state.number_plates } add_number_plate={ this.handleNewNumberPlate }/>
+                <NumberPlateTable owners={ this.state.owners } number_plates={ this.state.number_plates } add_number_plate={ this.handleNewNumberPlate } edit_number_plate={ this.handleNumberPlateChange }/>
               </tbody>
               <tbody id="number-plate-table"/>
             </table>
