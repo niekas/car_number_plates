@@ -6,15 +6,14 @@ website, since JavaScript libraries are included from remote sources.
 ## Preparing environment in Ubuntu/Debian
 Note: these commands may need ``sudo`` rights.
 
-    $ apt-get install python3-pip
-    $ pip3 install virtualenv
+    $ apt-get install python3-pip python3-venv
     $ python3 -m venv .
     $ bin/pip3 install -r requirements.txt  # Install Python dependencies
-    $ ./plates/manage.py migrate            # Apply database migrations
 
 ## Usage
 
     $ source bin/activate
+    $ ./plates/manage.py migrate            # Apply database migrations
     $ ./plates/manage.py runserver
 
 Access the webpage http://127.0.0.1:8000/
