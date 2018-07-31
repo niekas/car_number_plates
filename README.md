@@ -14,8 +14,9 @@ Note: these commands may need ``sudo`` rights.
 
     $ source bin/activate
     $ ./plates/manage.py migrate            # Apply database migrations
+    $ ./plates/manage.py createsuperuser    # Create admin user
     $ ./plates/manage.py runserver
 
-Access the webpage http://127.0.0.1:8000/
+Access the webpage http://127.0.0.1:8000/ and django admin http://127.0.0.1:8000/admin/
 
     $ deactivate
