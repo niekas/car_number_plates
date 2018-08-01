@@ -74,15 +74,7 @@
             function handlePATCHresponse(resp) {
               if (resp.status != 200) {
                 resp.json().then(json => {
-                  if ('non_field_errors' in json) {
-                    this.setState({'error_message': json.non_field_errors[0]});
-                  };
-                  if ('number' in json) {
-                    this.setState({'error_message': json.number[0]});
-                  };
-                  if ('owner' in json) {
-                    this.setState({'error_message': json.owner[0]});
-                  };
+                  this.setState({'error_message': json[Object.keys(json)[0]]});
                 })
               } else {
                 this.setState({'error_message': null});
@@ -230,7 +222,7 @@
         this.state = {
           new_number_plate: '',
           new_owner_id: '-1',
-          error_message: null,
+          error_message: null
         };
 
         this.resetNewNumberPlateState = this.resetNewNumberPlateState.bind(this);
@@ -256,15 +248,7 @@
         function handlePOSTResponse(resp) {
           if (resp.status !== 201) {
             resp.json().then(json => {
-              if ('non_field_errors' in json) {
-                this.setState({'error_message': json.non_field_errors[0]});
-              };
-              if ('number' in json) {
-                this.setState({'error_message': json.number[0]});
-              };
-              if ('owner' in json) {
-                this.setState({'error_message': json.owner[0]});
-              };
+              this.setState({'error_message': json[Object.keys(json)[0]]});
             })
           } else {
             resp.json().then(json => {
@@ -364,6 +348,25 @@
 
       toggleEditable(event) {
         if (this.props.editable === true) {
+            function handlePATCHresponse(resp) {
+              if (resp.status != 200) {
+                resp.json().then(json => {
+                  this.setState({'error_message': json[Object.keys(json)[0]]});
+                })
+              } else {
+                this.setState({'error_message': null});
+                this.props.edit_owner({
+                  owner_id: this.props.owner_id,
+                  first_name: this.props.first_name,
+                  last_name: this.props.last_name,
+                  deleted: this.props.deleted,
+                  editable: !this.props.editable
+                })
+              };
+            };
+            handlePATCHresponse = handlePATCHresponse.bind(this);
+
+
           fetch('/api/owners/'+ this.props.owner_id + '/' , {
             method: 'PATCH',
             headers: {
@@ -374,20 +377,21 @@
               'first_name': this.props.first_name,
               'last_name': this.props.last_name,
               'id': this.props.owner_id})
-            }).then(function (resp) {
-              resp.json().then(json => {
-            });
-          }).catch(function (err) {
+          }).then(handlePATCHresponse
+          ).catch(function (err) {
           });
+
+
+        } else {
+            this.props.edit_owner({
+              owner_id: this.props.owner_id,
+              first_name: this.props.first_name,
+              last_name: this.props.last_name,
+              deleted: this.props.deleted,
+              editable: true
+            });
         };
 
-        this.props.edit_owner({
-          owner_id: this.props.owner_id,
-          first_name: this.props.first_name,
-          last_name: this.props.last_name,
-          deleted: this.props.deleted,
-          editable: !this.props.editable
-        })
       };
 
       handleDelete(event) {
@@ -417,6 +421,7 @@
           return (
             <tr>
               <td>
+                <ErrorMessage error_message={ this.state.error_message }/>
                 <div class="input-group">
                   <input class="form-control" placeholder="First name" name="number_plate" onChange={ this.handleFirstNameChange } value={ this.props.first_name }/>
                   <input class="form-control" placeholder="Last name" name="number_plate_id" onChange={ this.handleLastNameChange } value={ this.props.last_name }/>
@@ -459,7 +464,7 @@
         this.state = {
           new_first_name: '',
           new_last_name: '',
-          error_message: '',
+          error_message: null
         };
 
         this.resetNewOwnerState = this.resetNewOwnerState.bind(this);
@@ -484,15 +489,23 @@
         event.preventDefault();
 
         function handlePOSTResponse(resp) {
-          resp.json().then(json => {
-            var new_element = {
-              owner_id: json['id'].toString(),
-              first_name: this.state.new_first_name,
-              last_name: this.state.new_last_name,
-            };
-            this.resetNewOwnerState();
-            this.props.add_owner(new_element);
-          });
+          if (resp.status != 201) {
+            resp.json().then(json => {
+              this.setState({'error_message': json[Object.keys(json)[0]]});
+            })
+          } else {
+            this.setState({'error_message': null});
+            resp.json().then(json => {
+              var new_element = {
+                owner_id: json['id'].toString(),
+                first_name: this.state.new_first_name,
+                last_name: this.state.new_last_name,
+              };
+              this.resetNewOwnerState();
+              this.props.add_owner(new_element);
+            });
+          };
+
         };
         handlePOSTResponse = handlePOSTResponse.bind(this);
 
@@ -508,7 +521,6 @@
             number_plate: []
           })
         }).then(handlePOSTResponse).catch(function (err) {
-          this.setState({error_message: err});
         });
       };
 
@@ -517,6 +529,7 @@
           <tr>
             <td colspan="2">
               <form onSubmit={ this.handleCreate }>
+                <ErrorMessage error_message={ this.state.error_message }/>
                 <div class="input-group">
                   <input id='first_name' class="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2" value={this.state.new_first_name} onChange={this.handleFirstNameChange} />
                   <input id='last_name' class="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2" value={this.state.new_last_name} onChange={this.handleLastNameChange} />

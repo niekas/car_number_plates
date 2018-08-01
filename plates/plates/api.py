@@ -21,7 +21,7 @@ class OwnerSerializer(serializers.ModelSerializer):
             UniqueTogetherValidator(
                 queryset=Owner.objects.all(),
                 fields=('first_name', 'last_name'),
-                message='Owner already exists with this first and last names'
+                message='Owner already exists with such first and last names'
             )
         ]
 
