@@ -1,3 +1,4 @@
+{% load static %}
 <html>
 <head>
   <title>Car Number Plates</title>
@@ -13,20 +14,7 @@
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/16.3.2/umd/react.production.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react-dom/16.3.2/umd/react-dom.production.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.min.js"></script>
-  <style>
-    form {
-      display: inline;
-    }
-    #owner-edit {
-      max-width: 100%;
-    }
-    table {
-      width: 500px;
-      table-layout: fixed;
-      margin-bottom: 30px;
-    }
-  </style>
-
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
 
   <script type="text/babel">
     class NumberPlate extends React.Component {
