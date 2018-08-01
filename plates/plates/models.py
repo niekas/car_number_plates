@@ -10,9 +10,7 @@ class Owner(models.Model):
 
 
 class NumberPlate(models.Model):
-    # There are a lot of different formats of plate numbers, see:
-    # https://regitra.lt/lt/paslaugos-ir-veikla/numerio-zenklai/numerio-zenklu-tipai
-    number = models.CharField(max_length=255)
+    number = models.CharField(max_length=255, unique=True)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE, related_name='number_plate')
 
     def __str__(self):
