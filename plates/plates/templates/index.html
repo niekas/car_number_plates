@@ -145,20 +145,20 @@
             <tr>
               <td>
                 <ErrorMessage error_message={ this.state.error_message }/>
-                <input class="form-control" size="6" name="number_plate" onChange={ this.handleNumberPlateChange } value={ this.props.number_plate }/>
-                <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
+                <input className="form-control" size="6" name="number_plate" onChange={ this.handleNumberPlateChange } value={ this.props.number_plate }/>
+                <input className="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
               </td>
               <td>
-                <select id='owner-edit' ref='owner' name='owner' class="custom-select" value={this.props.owner_id} onChange={this.handleOwnerChange}>
+                <select id='owner-edit' ref='owner' name='owner' className="custom-select" value={this.props.owner_id} onChange={this.handleOwnerChange}>
                   <OwnerOptions owners={ this.props.owners } show_no_selection={ false } />
                 </select>
               </td>
               <td>
-                <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                  <i class="fas fa-save"></i>
+                <button className="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                  <i className="fas fa-save"></i>
                 </button>&nbsp;
-                <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                  <i class="fas fa-trash"></i>
+                <button className="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                  <i className="fas fa-trash"></i>
                 </button>
               </td>
             </tr>
@@ -168,20 +168,20 @@
           <tr>
             <td>
               { this.props.number_plate }
-              <input class="form-control" type="hidden" size="6" name="number_plate" value={ this.props.number_plate }/>
-              <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
+              <input className="form-control" type="hidden" size="6" name="number_plate" value={ this.props.number_plate }/>
+              <input className="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
             </td>
             <td>
               { this.props.owner }
-              <input class="form-control" type="hidden" size="6" name="owner" value={ this.props.owner }/>
-              <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/>
+              <input className="form-control" type="hidden" size="6" name="owner" value={ this.props.owner }/>
+              <input className="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/>
             </td>
             <td>
-              <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                <i class="fas fa-edit"></i>
+              <button className="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                <i className="fas fa-edit"></i>
               </button>&nbsp;
-              <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                <i class="fas fa-trash"></i>
+              <button className="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                <i className="fas fa-trash"></i>
               </button>
             </td>
           </tr>
@@ -292,15 +292,15 @@
               <form onSubmit={ this.handleCreate }>
                 {% csrf_token %}
                 <ErrorMessage error_message={ this.state.error_message }/>
-                <div class="input-group">
-                  <input id='number_plate' class="form-control" type="text" name="number_plate" placeholder="Car plate"
+                <div className="input-group">
+                  <input id='number_plate' className="form-control" type="text" name="number_plate" placeholder="Car plate"
                          size="10" aria-describedby="button-addon1" onChange={this.handleNumberPlateChange} value={ this.state.new_number_plate } />
-                  <select id='owner' ref='owner' name='owner' class="custom-select" id="inputGroupSelect02" value={ this.state.new_owner_id } onChange={this.handleOwnerChange}>
+                  <select id='owner' ref='owner' name='owner' className="custom-select" id="inputGroupSelect02" value={ this.state.new_owner_id } onChange={this.handleOwnerChange}>
                     <OwnerOptions owners={ this.props.owners } show_no_selection={ true } />
                   </select>
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="submit" id="button-addon1">
-                      <i class="fas fa-plus-square"></i>
+                  <div className="input-group-append">
+                    <button className="btn btn-outline-primary" type="submit" id="button-addon1">
+                      <i className="fas fa-plus-square"></i>
                     </button>
                   </div>
                 </div>
@@ -422,17 +422,17 @@
             <tr>
               <td>
                 <ErrorMessage error_message={ this.state.error_message }/>
-                <div class="input-group">
-                  <input class="form-control" placeholder="First name" name="number_plate" onChange={ this.handleFirstNameChange } value={ this.props.first_name }/>
-                  <input class="form-control" placeholder="Last name" name="number_plate_id" onChange={ this.handleLastNameChange } value={ this.props.last_name }/>
+                <div className="input-group">
+                  <input className="form-control" placeholder="First name" name="number_plate" onChange={ this.handleFirstNameChange } value={ this.props.first_name }/>
+                  <input className="form-control" placeholder="Last name" name="number_plate_id" onChange={ this.handleLastNameChange } value={ this.props.last_name }/>
                 </div>
               </td>
               <td>
-                <button class="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                  <i class="fas fa-save"></i>
+                <button className="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                  <i className="fas fa-save"></i>
                 </button>&nbsp;
-                <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                  <i class="fas fa-trash"></i>
+                <button className="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                  <i className="fas fa-trash"></i>
                 </button>
               </td>
             </tr>
@@ -441,16 +441,16 @@
         return (
           <tr>
             <td>
-              <div class="input-group">
-                <input class="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/> { this.props.first_name }&nbsp;{ this.props.last_name }
+              <div className="input-group">
+                <input className="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/> { this.props.first_name }&nbsp;{ this.props.last_name }
               </div>
             </td>
             <td>
-              <button class="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                <i class="fas fa-edit"></i>
+              <button className="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
+                <i className="fas fa-edit"></i>
               </button>&nbsp;
-              <button class="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                <i class="fas fa-trash"></i>
+              <button className="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
+                <i className="fas fa-trash"></i>
               </button>
             </td>
           </tr>
@@ -530,12 +530,12 @@
             <td colspan="2">
               <form onSubmit={ this.handleCreate }>
                 <ErrorMessage error_message={ this.state.error_message }/>
-                <div class="input-group">
-                  <input id='first_name' class="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2" value={this.state.new_first_name} onChange={this.handleFirstNameChange} />
-                  <input id='last_name' class="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2" value={this.state.new_last_name} onChange={this.handleLastNameChange} />
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="submit" id="button-addon2">
-                      <i class="fas fa-plus-square"></i>
+                <div className="input-group">
+                  <input id='first_name' className="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2" value={this.state.new_first_name} onChange={this.handleFirstNameChange} />
+                  <input id='last_name' className="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2" value={this.state.new_last_name} onChange={this.handleLastNameChange} />
+                  <div className="input-group-append">
+                    <button className="btn btn-outline-primary" type="submit" id="button-addon2">
+                      <i className="fas fa-plus-square"></i>
                     </button>
                   </div>
                 </div>
@@ -643,7 +643,7 @@
       render() {
         return ([
           <div>
-            <table id="owners" class='table-striped table-bordered' cellpadding="10">
+            <table id="owners" className='table-striped table-bordered' cellpadding="10">
               <thead>
                 <tr>
                   <th>Owner</th>
@@ -656,7 +656,7 @@
             </table>
           </div>,
           <div>
-            <table id="number-plates-tbl" class='table-striped table-bordered' cellpadding="10">
+            <table id="number-plates-tbl" className='table-striped table-bordered' cellpadding="10">
               <thead>
                 <tr>
                   <th>Car number plate</th>
