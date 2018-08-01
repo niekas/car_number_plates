@@ -31,7 +31,8 @@
   <script type="text/babel">
     class NumberPlate extends React.Component {
       constructor(props) {
-        super(props);
+          super(props);
+          this.state = {'error_message': null};
           this.handleNumberPlateChange = this.handleNumberPlateChange.bind(this);
           this.handleOwnerChange = this.handleOwnerChange.bind(this);
           this.handleDelete = this.handleDelete.bind(this);
@@ -67,6 +68,26 @@
 
         toggleEditable(event) {
           if (this.props.editable === true) {
+
+            function handlePATCHresponse(resp) {
+              if (resp.status != 200) {
+                resp.json().then(json => {
+                  this.setState({'error_message': json.non_field_errors[0]});
+                })
+              } else {
+                this.setState({'error_message': null});
+                this.props.edit_number_plate({
+                  "number_plate": this.props.number_plate,
+                  "number_plate_id": this.props.number_plate_id,
+                  "owner_id": this.props.owner_id,
+                  "owner": this.props.owner,
+                  "deleted": this.props.deleted,
+                  "editable": false
+                });
+              };
+            };
+            handlePATCHresponse = handlePATCHresponse.bind(this);
+
             fetch('/api/numberplates/'+ this.props.number_plate_id + '/' , {
               method: 'PATCH',
               headers: {
@@ -77,18 +98,20 @@
                 'owner': '/api/owners/' + this.props.owner_id + '/',
                 'number': this.props.number_plate,
                 'id': this.props.number_plate_id})
-              }).then(function (resp) {
-              }).catch(function (err) {
+              }).then(handlePATCHresponse
+              ).catch(function (err) {
             });
           };
-          this.props.edit_number_plate({
-            "number_plate": this.props.number_plate,
-            "number_plate_id": this.props.number_plate_id,
-            "owner_id": this.props.owner_id,
-            "owner": this.props.owner,
-            "deleted": this.props.deleted,
-            "editable": !this.props.editable
-          });
+          if (this.props.editable === false) {
+            this.props.edit_number_plate({
+              "number_plate": this.props.number_plate,
+              "number_plate_id": this.props.number_plate_id,
+              "owner_id": this.props.owner_id,
+              "owner": this.props.owner,
+              "deleted": this.props.deleted,
+              "editable": true
+            });
+          };
         };
 
         handleDelete(event) {
@@ -119,6 +142,7 @@
             return (
             <tr>
               <td>
+                <ErrorMessage error_message={ this.state.error_message }/>
                 <input class="form-control" size="6" name="number_plate" onChange={ this.handleNumberPlateChange } value={ this.props.number_plate }/>
                 <input class="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
               </td>
@@ -163,6 +187,15 @@
         }
      };
 
+    class ErrorMessage extends React.Component {
+        render() {
+          if (this.props.error_message === null) return null;
+          return (
+            <div>{ this.props.error_message }</div>
+          )
+        };
+    }
+
     class OwnerOptions extends React.Component {
       render() {
         if (this.props.show_no_selection === true) {
@@ -197,7 +230,7 @@
       };
 
       resetNewNumberPlateState() {
-        this.setState({new_number_plate: '', new_owner_id: '-1'});
+        this.setState({new_number_plate: '', new_owner_id: '-1', error_message: null});
       };
 
       handleOwnerChange(event) {
@@ -211,7 +244,15 @@
       handleCreate(event) {
         event.preventDefault();
         function handlePOSTResponse(resp) {
-          if (resp.status == 201) {
+          if (resp.status !== 201) {
+            resp.json().then(json => {
+              if ('owner' in json) {
+                this.setState({'error_message': 'Please select an owner'});
+              } else {
+                this.setState({'error_message': json.non_field_errors[0]});
+              };
+            })
+          } else {
             resp.json().then(json => {
               var new_element = {
                 owner_id: this.state.new_owner_id,
@@ -228,8 +269,6 @@
               this.props.add_number_plate(new_element);
               this.resetNewNumberPlateState();
             });
-          } else {
-            this.setState({error_message: 'All fields must be filled'});
           };
         };
         handlePOSTResponse = handlePOSTResponse.bind(this);
@@ -255,6 +294,7 @@
             <td colspan="3">
               <form onSubmit={ this.handleCreate }>
                 {% csrf_token %}
+                <ErrorMessage error_message={ this.state.error_message }/>
                 <div class="input-group">
                   <input id='number_plate' class="form-control" type="text" name="number_plate" placeholder="Car plate"
                          size="10" aria-describedby="button-addon1" onChange={this.handleNumberPlateChange} value={ this.state.new_number_plate } />
@@ -282,6 +322,7 @@
     class Owner extends React.Component {
       constructor(props) {
         super(props);
+        this.state = {'error_message': null};
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
