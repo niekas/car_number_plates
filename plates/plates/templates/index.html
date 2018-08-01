@@ -41,7 +41,7 @@
           this.toggleEditable = this.toggleEditable.bind(this);
         };
         handleNumberPlateChange(event) {
-          this.props.edit_number_plate({
+          this.props.onNumberPlateChange({
             "number_plate": event.target.value,
             "number_plate_id": this.props.number_plate_id,
             "owner_id": this.props.owner_id,
@@ -58,7 +58,7 @@
               break;
             };
           };
-          this.props.edit_number_plate({
+          this.props.onNumberPlateChange({
             "number_plate": this.props.number_plate,
             "number_plate_id": this.props.number_plate_id,
             "owner_id": event.target.value,
@@ -78,7 +78,7 @@
                 })
               } else {
                 this.setState({'error_message': null});
-                this.props.edit_number_plate({
+                this.props.onNumberPlateChange({
                   "number_plate": this.props.number_plate,
                   "number_plate_id": this.props.number_plate_id,
                   "owner_id": this.props.owner_id,
@@ -105,7 +105,7 @@
             });
           };
           if (this.props.editable === false) {
-            this.props.edit_number_plate({
+            this.props.onNumberPlateChange({
               "number_plate": this.props.number_plate,
               "number_plate_id": this.props.number_plate_id,
               "owner_id": this.props.owner_id,
@@ -118,7 +118,7 @@
 
         handleDelete(event) {
           function handleDELETEResponse(resp) {
-            this.props.edit_number_plate({
+            this.props.onNumberPlateChange({
               "number_plate": this.props.number_plate,
               "number_plate_id": this.props.number_plate_id,
               "owner_id": this.props.owner_id,
@@ -264,7 +264,7 @@
                   break;
                 };
               };
-              this.props.add_number_plate(new_element);
+              this.props.onNumberPlateCreate(new_element);
               this.resetNewNumberPlateState();
             });
           };
@@ -310,7 +310,7 @@
           this.props.number_plates.map(data => {
             return <NumberPlate number_plate={data.number_plate} number_plate_id={data.number_plate_id} owners={ this.props.owners }
                                 owner={data.owner} owner_id={data.owner_id} deleted={data.deleted} editable={ data.editable }
-                                edit_number_plate={this.props.edit_number_plate} />
+                                onNumberPlateChange={this.props.onNumberPlateChange} />
           })
         ]);
       }
@@ -327,7 +327,7 @@
       };
 
       handleFirstNameChange(event) {
-        this.props.edit_owner({
+        this.props.onOwnerChange({
           owner_id: this.props.owner_id,
           first_name: event.target.value,
           last_name: this.props.last_name,
@@ -337,7 +337,7 @@
       };
 
       handleLastNameChange(event) {
-        this.props.edit_owner({
+        this.props.onOwnerChange({
           owner_id: this.props.owner_id,
           first_name: this.props.first_name,
           last_name: event.target.value,
@@ -355,7 +355,7 @@
                 })
               } else {
                 this.setState({'error_message': null});
-                this.props.edit_owner({
+                this.props.onOwnerChange({
                   owner_id: this.props.owner_id,
                   first_name: this.props.first_name,
                   last_name: this.props.last_name,
@@ -383,7 +383,7 @@
 
 
         } else {
-            this.props.edit_owner({
+            this.props.onOwnerChange({
               owner_id: this.props.owner_id,
               first_name: this.props.first_name,
               last_name: this.props.last_name,
@@ -396,7 +396,7 @@
 
       handleDelete(event) {
         function handleDELETEResponse(resp) {
-          this.props.edit_owner({
+          this.props.onOwnerChange({
             owner_id: this.props.owner_id,
             first_name: this.props.first_name,
             last_name: this.props.last_name,
@@ -502,7 +502,7 @@
                 last_name: this.state.new_last_name,
               };
               this.resetNewOwnerState();
-              this.props.add_owner(new_element);
+              this.props.onOwnerCreate(new_element);
             });
           };
 
@@ -544,7 +544,7 @@
           </tr>,
           this.props.owners.map(data => {
             return <Owner first_name={data.first_name} last_name={data.last_name} owner_id={data.owner_id}
-                          deleted={data.deleted} editable={ data.editable } edit_owner={ this.props.edit_owner }/>
+                          deleted={data.deleted} editable={ data.editable } onOwnerChange={ this.props.onOwnerChange }/>
         })]);
       }
     };
@@ -651,7 +651,7 @@
                 </tr>
               </thead>
               <tbody>
-                <OwnerTable owners={ this.state.owners } add_owner={ this.handleNewOwner } edit_owner={ this.handleOwnerChange } />
+                <OwnerTable owners={ this.state.owners } onOwnerCreate={ this.handleNewOwner } onOwnerChange={ this.handleOwnerChange } />
               </tbody>
             </table>
           </div>,
@@ -665,7 +665,8 @@
                 </tr>
               </thead>
               <tbody>
-                <NumberPlateTable owners={ this.state.owners } number_plates={ this.state.number_plates } add_number_plate={ this.handleNewNumberPlate } edit_number_plate={ this.handleNumberPlateChange }/>
+                <NumberPlateTable owners={ this.state.owners } number_plates={ this.state.number_plates }
+                  onNumberPlateCreate={ this.handleNewNumberPlate } onNumberPlateChange={ this.handleNumberPlateChange }/>
               </tbody>
               <tbody id="number-plate-table"/>
             </table>
