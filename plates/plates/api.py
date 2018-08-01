@@ -2,6 +2,7 @@ import re
 
 from rest_framework import serializers, viewsets
 from rest_framework import filters
+from rest_framework import exceptions
 from rest_framework.views import exception_handler
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -9,7 +10,7 @@ from plates.models import Owner, NumberPlate
 
 
 
-class OwnerSerializer(serializers.HyperlinkedModelSerializer):
+class OwnerSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(label='ID', read_only=True)
     number_plate = serializers.StringRelatedField(many=True)
 
@@ -25,7 +26,7 @@ class OwnerSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class NumberPlateSerializer(serializers.HyperlinkedModelSerializer):
+class NumberPlateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(label='ID', read_only=True)
 
     class Meta:
@@ -44,7 +45,6 @@ class NumberPlateSerializer(serializers.HyperlinkedModelSerializer):
         return value
 
 
-
 class OwnerViewSet(viewsets.ModelViewSet):
     queryset = Owner.objects.all()
     serializer_class = OwnerSerializer
@@ -53,3 +53,13 @@ class OwnerViewSet(viewsets.ModelViewSet):
 class NumberPlateViewSet(viewsets.ModelViewSet):
     queryset = NumberPlate.objects.all()
     serializer_class = NumberPlateSerializer
+
+
+
+def custom_exception_handler(exc, context):
+    response = exception_handler(exc, context)
+
+    if response is not None and response.status_code == 400:
+        if 'owner' in response.data and response.data['owner'][0].code == 'does_not_exist':
+            response.data['owner'][0] = exceptions.ErrorDetail('Please choose an owner.', code='does_not_exist')
+    return response
