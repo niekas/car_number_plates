@@ -50,7 +50,10 @@ class OwnerAndNumberPlateTables extends Component {
     const filteredOwners = this.state.owners.filter(owner => {
       return owner.id !== owner_id;
     });
-    this.setState({owners: filteredOwners})
+    const filteredNumberPlates = this.state.number_plates.filter(number_plate => {
+      return number_plate.owner != owner_id;
+    });
+    this.setState({owners: filteredOwners, number_plates: filteredNumberPlates});
 
     fetch('/api/owners/' + owner_id + '/', {
       method: 'DELETE',
