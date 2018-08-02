@@ -4,10 +4,12 @@ accessable via terminal.
 
 ## Preparing environment in Ubuntu/Debian
 
+    $ git clone http://github.com/niekas/car_number_plates
+    $ cd car_number_plates
     $ sudo apt-get install python3-pip python3-venv nodejs
     $ python3 -m venv .
     $ bin/pip3 install -r requirements.txt  # Install Python dependencies
-    $ # Install node.js (npm is included)
+    $ # Install node.js v10.1.0 (npm is included, npm 5.6.0 version is needed)
     $ npm install
     $ npm run build
     $ cp plates/plates/build/static/css/*.css plates/plates/static/css/
