@@ -28,6 +28,7 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 class NumberPlateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(label='ID', read_only=True)
+    owner_full_name = serializers.StringRelatedField(source='owner')
 
     class Meta:
         model = NumberPlate

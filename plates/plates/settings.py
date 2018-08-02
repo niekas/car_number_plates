@@ -123,6 +123,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'plates', 'plates', 'static')
+
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'plates.api.custom_exception_handler'
 }

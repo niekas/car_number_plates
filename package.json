@@ -1,0 +1,19 @@
+{
+  "name": "plates",
+  "version": "1.0.0",
+  "description": "REACT components for lithuanian car number plates management website.",
+  "main": "OwnerAndNumberPlateTables.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "cd plates/plates && react-scripts start",
+    "build": "cd plates/plates && npm run build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
