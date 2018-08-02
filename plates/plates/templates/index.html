@@ -2,19 +2,10 @@
 <html>
 <head>
   <title>Car Number Plates</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
-  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://fb.me/react-15.0.0.js"></script>
-  <script type="text/javascript" src="https://fb.me/react-dom-15.0.0.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.1/prop-types.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/16.3.2/umd/react.production.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react-dom/16.3.2/umd/react-dom.production.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 
   <script type="text/babel">
     class NumberPlate extends React.Component {
@@ -133,21 +124,16 @@
             <tr>
               <td>
                 <ErrorMessage error_message={ this.state.error_message }/>
-                <input className="form-control" size="6" name="number_plate" onChange={ this.handleNumberPlateChange } value={ this.props.number_plate }/>
-                <input className="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
+                <input size="7" onChange={ this.handleNumberPlateChange } value={ this.props.number_plate }/>
               </td>
               <td>
-                <select id='owner-edit' ref='owner' name='owner' className="custom-select" value={this.props.owner_id} onChange={this.handleOwnerChange}>
+                <select id='owner-edit' ref='owner' name='owner' value={this.props.owner_id} onChange={this.handleOwnerChange}>
                   <OwnerOptions owners={ this.props.owners } show_no_selection={ false } />
                 </select>
               </td>
               <td>
-                <button className="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                  <i className="fas fa-save"></i>
-                </button>&nbsp;
-                <button className="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                  <i className="fas fa-trash"></i>
-                </button>
+                <button type="button" onClick={ this.toggleEditable }> Save </button>
+                <button type="button" onClick={ this.handleDelete }> Delete </button>
               </td>
             </tr>
             );
@@ -156,21 +142,13 @@
           <tr>
             <td>
               { this.props.number_plate }
-              <input className="form-control" type="hidden" size="6" name="number_plate" value={ this.props.number_plate }/>
-              <input className="form-control" type="hidden" size="6" name="number_plate_id" value={ this.props.number_plate_id }/>
             </td>
             <td>
               { this.props.owner }
-              <input className="form-control" type="hidden" size="6" name="owner" value={ this.props.owner }/>
-              <input className="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/>
             </td>
             <td>
-              <button className="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                <i className="fas fa-edit"></i>
-              </button>&nbsp;
-              <button className="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                <i className="fas fa-trash"></i>
-              </button>
+              <button type="button" onClick={ this.toggleEditable }> Edit </button>&nbsp;
+              <button type="button" onClick={ this.handleDelete }> Delete </button>
             </td>
           </tr>
           );
@@ -280,18 +258,11 @@
               <form onSubmit={ this.handleCreate }>
                 {% csrf_token %}
                 <ErrorMessage error_message={ this.state.error_message }/>
-                <div className="input-group">
-                  <input id='number_plate' className="form-control" type="text" name="number_plate" placeholder="Car plate"
-                         size="10" aria-describedby="button-addon1" onChange={this.handleNumberPlateChange} value={ this.state.new_number_plate } />
-                  <select id='owner' ref='owner' name='owner' className="custom-select" id="inputGroupSelect02" value={ this.state.new_owner_id } onChange={this.handleOwnerChange}>
+                  <input type="text" placeholder="Number plate" size="12" onChange={ this.handleNumberPlateChange } value={ this.state.new_number_plate } />
+                  <select value={ this.state.new_owner_id } onChange={this.handleOwnerChange}>
                     <OwnerOptions owners={ this.props.owners } show_no_selection={ true } />
                   </select>
-                  <div className="input-group-append">
-                    <button className="btn btn-outline-primary" type="submit" id="button-addon1">
-                      <i className="fas fa-plus-square"></i>
-                    </button>
-                  </div>
-                </div>
+                  <button type="submit"> Create </button>
               </form>
             </td>
           </tr>,
@@ -410,18 +381,12 @@
             <tr>
               <td>
                 <ErrorMessage error_message={ this.state.error_message }/>
-                <div className="input-group">
-                  <input className="form-control" placeholder="First name" name="number_plate" onChange={ this.handleFirstNameChange } value={ this.props.first_name }/>
-                  <input className="form-control" placeholder="Last name" name="number_plate_id" onChange={ this.handleLastNameChange } value={ this.props.last_name }/>
-                </div>
+                <input placeholder="First name" size="14" onChange={ this.handleFirstNameChange } value={ this.props.first_name }/>
+                <input placeholder="Last name" size="14" onChange={ this.handleLastNameChange } value={ this.props.last_name }/>
               </td>
               <td>
-                <button className="btn btn-outline-dark" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                  <i className="fas fa-save"></i>
-                </button>&nbsp;
-                <button className="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                  <i className="fas fa-trash"></i>
-                </button>
+                <button type="button" onClick={ this.toggleEditable }> Save </button>
+                <button type="button" onClick={ this.handleDelete }> Delete </button>
               </td>
             </tr>
           );
@@ -429,17 +394,11 @@
         return (
           <tr>
             <td>
-              <div className="input-group">
-                <input className="form-control" type="hidden" size="6" name="owner_id" value={ this.props.owner_id }/> { this.props.first_name }&nbsp;{ this.props.last_name }
-              </div>
+              { this.props.first_name } { this.props.last_name }
             </td>
             <td>
-              <button className="btn btn-outline-primary" type="button" id="button-addon3" onClick={ this.toggleEditable }>
-                <i className="fas fa-edit"></i>
-              </button>&nbsp;
-              <button className="btn btn-outline-danger" type="button" id="button-addon3" onClick={ this.handleDelete }>
-                <i className="fas fa-trash"></i>
-              </button>
+              <button type="button" onClick={ this.toggleEditable }> Edit </button>
+              <button type="button" onClick={ this.handleDelete }> Delete </button>
             </td>
           </tr>
         );
@@ -518,15 +477,9 @@
             <td colspan="2">
               <form onSubmit={ this.handleCreate }>
                 <ErrorMessage error_message={ this.state.error_message }/>
-                <div className="input-group">
-                  <input id='first_name' className="form-control" type="text" name="fname" placeholder="First name" size="10" aria-describedby="button-addon2" value={this.state.new_first_name} onChange={this.handleFirstNameChange} />
-                  <input id='last_name' className="form-control" type="text" name="lname" placeholder="Last name" size="10" aria-describedby="button-addon2" value={this.state.new_last_name} onChange={this.handleLastNameChange} />
-                  <div className="input-group-append">
-                    <button className="btn btn-outline-primary" type="submit" id="button-addon2">
-                      <i className="fas fa-plus-square"></i>
-                    </button>
-                  </div>
-                </div>
+                <input type="text" size="12" placeholder="First name" value={ this.state.new_first_name } onChange={ this.handleFirstNameChange } />
+                <input type="text" size="12" placeholder="Last name" value={ this.state.new_last_name } onChange={ this.handleLastNameChange } />
+                <button type="submit"> Create </button>
               </form>
             </td>
           </tr>,
@@ -631,7 +584,7 @@
       render() {
         return ([
           <div>
-            <table id="owners" className='table-striped table-bordered' cellpadding="10">
+            <table>
               <thead>
                 <tr>
                   <th>Owner</th>
@@ -644,7 +597,7 @@
             </table>
           </div>,
           <div>
-            <table id="number-plates-tbl" className='table-striped table-bordered' cellpadding="10">
+            <table>
               <thead>
                 <tr>
                   <th>Car number plate</th>
@@ -656,7 +609,6 @@
                 <NumberPlateTable owners={ this.state.owners } number_plates={ this.state.number_plates }
                   onNumberPlateCreate={ this.handleNewNumberPlate } onNumberPlateChange={ this.handleNumberPlateChange }/>
               </tbody>
-              <tbody id="number-plate-table"/>
             </table>
           </div>
         ])
@@ -665,12 +617,12 @@
 
     ReactDOM.render(
       <OwnerAndNumberPlateTables />,
-      document.getElementById('owner-and-number-plate-tables')
+      document.getElementById('root')
     );
   </script>
 </head>
 
 <body>
-  <div id="owner-and-number-plate-tables" style="width:500px; margin:5% auto;" />
+  <div id="root" />
 </body>
 </html>

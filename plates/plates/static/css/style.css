@@ -1,0 +1,24 @@
+#root {
+  width: 500px;
+  margin: 5% auto;
+}
+
+form {
+  display: inline;
+}
+
+table {
+  width: 500px;
+  table-layout: fixed;
+  margin-bottom: 30px;
+  border-collapse: collapse;
+}
+
+table td, th {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+select {
+  max-width: 150px;
+}
