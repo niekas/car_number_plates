@@ -20,7 +20,7 @@ class NumberPlate extends React.Component {
         this.props.onNumberPlateChange({
           id: this.props.number_plate_id,
           number: event.target.value,
-          owner: this.props.owner,
+          owner_id: this.props.owner_id,
           owner_full_name: this.props.owner_full_name
         })
     };
@@ -37,7 +37,7 @@ class NumberPlate extends React.Component {
       this.props.onNumberPlateChange({
         id: this.props.number_plate_id,
         number: this.props.number,
-        owner:  event.target.value,
+        owner_id:  event.target.value,
         owner_full_name: owner_full_name
       })
     };
@@ -45,11 +45,20 @@ class NumberPlate extends React.Component {
     toggleEditable(event) {
       if (this.state.editable === true) {
         function handlePATCHresponse(resp) {
-          if (resp.status != 200) {
+          if (resp.status !== 200) {
             resp.json().then(json => {
               this.setState({error_message: json[Object.keys(json)[0]]});
             })
           } else {
+            resp.json().then(json => {
+              var updated_element = {
+                id: json['id'],
+                number: json['number'],
+                owner_id: json['owner_id'],
+                owner_full_name: json['owner_full_name']
+              };
+              this.props.onNumberPlateChange(updated_element);
+            });
             this.setState({error_message: null, editable: false});
           };
         };
@@ -62,9 +71,9 @@ class NumberPlate extends React.Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            'owner': this.props.owner_id,
-            'number': this.props.number_plate,
-            'id': this.props.number_plate_id})
+            'owner_id': this.props.owner_id,
+            'number': this.props.number
+          })
         }).then(handlePATCHresponse);
       } else {
         this.setState({editable: true});

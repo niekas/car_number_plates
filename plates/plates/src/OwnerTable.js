@@ -86,8 +86,8 @@ class OwnerTable extends React.Component {
         </td>
       </tr>,
       this.props.owners.map(data => {
-        return <Owner first_name={data.first_name} last_name={data.last_name} owner_id={data.id}
-            onOwnerChange={ this.props.onOwnerChange } onOwnerDelete={ this.props.onOwnerDelete}/>
+        return <Owner first_name={ data.first_name } last_name={ data.last_name } owner_id={ data.id }
+            onOwnerChange={ this.props.onOwnerChange } onOwnerDelete={ this.props.onOwnerDelete }/>
     })]);
   }
 };

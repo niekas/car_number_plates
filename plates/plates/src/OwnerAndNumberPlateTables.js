@@ -15,18 +15,6 @@ class OwnerAndNumberPlateTables extends Component {
     this.onOwnerDelete = this.onOwnerDelete.bind(this);
   };
 
-  // onNumberPlateChange(number_plate) {
-  //   var number_plates = [];
-  //   for (var i=0; i < this.state.number_plates.length; i++) {
-  //     if (number_plate["number_plate_id"] === this.state.number_plates[i].number_plate_id) {
-  //       number_plates.push(number_plate);
-  //     } else {
-  //       number_plates.push(this.state.number_plates[i]);
-  //     };
-  //   };
-  //   this.setState({number_plates: number_plates});
-  // };
-
   onOwnerCreate(new_owner) {
     this.setState({owners: [...this.state.owners, {
       'id': new_owner.owner_id,
@@ -51,7 +39,7 @@ class OwnerAndNumberPlateTables extends Component {
       return owner.id !== owner_id;
     });
     const filteredNumberPlates = this.state.number_plates.filter(number_plate => {
-      return number_plate.owner != owner_id;
+      return number_plate.owner_id != owner_id;
     });
     this.setState({owners: filteredOwners, number_plates: filteredNumberPlates});
 
@@ -68,7 +56,7 @@ class OwnerAndNumberPlateTables extends Component {
     this.setState({number_plates: [...this.state.number_plates, {
       'id': new_number_plate.id,
       'number': new_number_plate.number,
-      'owner': new_number_plate.owner,
+      'owner_id': new_number_plate.owner_id,
       'owner_full_name': new_number_plate.owner_full_name,
     }]});
   };
@@ -77,7 +65,7 @@ class OwnerAndNumberPlateTables extends Component {
     var number_plates = this.state.number_plates.map(number_plate => {
       if (number_plate.id === number_plate_changed.id) {
         number_plate.number = number_plate_changed.number;
-        number_plate.owner = number_plate_changed.owner;
+        number_plate.owner_id = number_plate_changed.owner_id;
         number_plate.owner_full_name = number_plate_changed.owner_full_name;
       };
       return number_plate;

@@ -24,17 +24,28 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 class NumberPlateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(label='ID', read_only=True)
+    owner_id = serializers.PrimaryKeyRelatedField(queryset=Owner.objects.all())
     owner_full_name = serializers.StringRelatedField(source='owner')
 
     class Meta:
         model = NumberPlate
-        fields = '__all__'
+        exclude = ('owner',)
+
+    def create(self, validated_data):
+        if 'owner_id' in validated_data:
+            validated_data['owner'] = validated_data.pop('owner_id')
+        return super(NumberPlateSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'owner_id' in validated_data:
+            validated_data['owner'] = validated_data.pop('owner_id')
+        return super(NumberPlateSerializer, self).update(instance, validated_data)
 
     def validate_number(self, value):
-        # https://regitra.lt/lt/paslaugos-ir-veikla/numerio-zenklai/numerio-zenklu-tipai
+        # Format taken from https://regitra.lt/lt/paslaugos-ir-veikla/numerio-zenklai/numerio-zenklu-tipai
         lt_number_plate_format = re.compile("^[a-zA-Z0-9]{1,6}$")
 
         if not lt_number_plate_format.match(value):
             raise serializers.ValidationError("Up to 6 english letters and "
-                       "numbers are allowed in lithuanian car number plates")
+                       "numbers are allowed in lithuanian car number plates.")
         return value

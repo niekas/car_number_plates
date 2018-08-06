@@ -48,9 +48,9 @@ class NumberPlateTable extends React.Component {
       } else {
         resp.json().then(json => {
           var new_element = {
-            owner: this.state.new_owner_id,
-            owner_full_name: this.state.new_owner_full_name,
-            number: this.state.new_number_plate,
+            owner_id: json['owner_id'],
+            owner_full_name: json['owner_full_name'],
+            number: json['number'],
             id: json['id']
           };
           this.props.onNumberPlateCreate(new_element);
@@ -67,7 +67,7 @@ class NumberPlateTable extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        'owner': this.state.new_owner_id,
+        'owner_id': this.state.new_owner_id,
         'number': this.state.new_number_plate
       })
     }).then(handlePOSTResponse).catch(function (err) {
@@ -81,7 +81,7 @@ class NumberPlateTable extends React.Component {
           <form onSubmit={ this.handleCreate }>
             <ErrorMessage error_message={ this.state.error_message }/>
               <input type="text" placeholder="Number plate" size="12" onChange={ this.handleNumberPlateChange } value={ this.state.new_number_plate } />
-              <select value={ this.state.new_owner_id } onChange={this.handleOwnerChange}>
+              <select value={ this.state.new_owner_id } onChange={ this.handleOwnerChange }>
                 <OwnerOptions owners={ this.props.owners } show_no_selection={ true } />
               </select>
               <button type="submit"> Create </button>
@@ -89,8 +89,8 @@ class NumberPlateTable extends React.Component {
         </td>
       </tr>,
       this.props.number_plates.map(data => {
-        return <NumberPlate number={data.number} number_plate_id={data.id} owner={data.owner} owner_full_name={data.owner_full_name}
-            onNumberPlateChange={this.props.onNumberPlateChange} onNumberPlateDelete={this.props.onNumberPlateDelete} 
+        return <NumberPlate number={ data.number } number_plate_id={ data.id } owner_id={ data.owner_id } owner_full_name={ data.owner_full_name }
+            onNumberPlateChange={ this.props.onNumberPlateChange } onNumberPlateDelete={ this.props.onNumberPlateDelete } 
             owners={ this.props.owners } />
       })
     ]);
