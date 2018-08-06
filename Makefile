@@ -7,3 +7,7 @@ build_and_run:
 
 test:
 	./plates/manage.py test plates.tests
+
+coverage:
+	bin/coverage run --source=plates --omit=*/migrations/*,*/manage.py ./plates/manage.py test plates.tests
+	bin/coverage report -m
