@@ -3,4 +3,3 @@ from .models import NumberPlate, Owner
 
 
 admin.register(Owner, NumberPlate)(admin.ModelAdmin)
-# Register your models here.

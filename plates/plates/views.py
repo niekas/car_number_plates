@@ -3,8 +3,8 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 
-from plates.models import Owner, NumberPlate
-from plates.api import OwnerSerializer, NumberPlateSerializer
+from .models import Owner, NumberPlate
+from .serializers import OwnerSerializer, NumberPlateSerializer
 
 
 def index(request):
