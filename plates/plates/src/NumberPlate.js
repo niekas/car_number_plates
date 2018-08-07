@@ -93,7 +93,7 @@ class NumberPlate extends React.Component {
             <input size="7" onChange={ this.onNumberPlateChange } value={ this.props.number }/>
           </td>
           <td>
-            <select id='owner-edit' ref='owner' name='owner' value={ this.props.owner } onChange={ this.onOwnerChange }>
+            <select id='owner-edit' ref='owner' name='owner' value={ this.props.owner_id } onChange={ this.onOwnerChange }>
               <OwnerOptions owners={ this.props.owners } show_no_selection={ false } />
             </select>
           </td>
